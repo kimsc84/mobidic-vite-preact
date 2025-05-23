@@ -1,0 +1,1197 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  background: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  height: 100%; /* html 태그가 전체 높이를 차지하도록 */
+  font-size: 16px; /* rem 기준 */
+  line-height: 1.5;
+}
+
+body {
+  min-height: 100%; /* body 태그가 최소한 전체 뷰포트 높이를 차지하도록 */
+  display: flex; /* body를 flex 컨테이너로 설정 */
+  flex-direction: column; /* 자식 요소들을 수직으로 정렬 */
+  font: var(--text-body-medium);
+  background-color: var(--color-background-default);
+}
+
+/* 헤더 스타일 시작 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 1rem;
+  border-bottom: 1px solid var(--color-gray-300);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 5rem;
+  z-index: 1000; /* 다른 요소들보다 위에 있도록 z-index 설정 */
+  background-color: var(--color-white);
+}
+
+.header__search-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30rem;
+}
+
+.header__search-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0.5rem;
+  padding-left: 1rem;
+  width: 100%;
+  height: 2.5rem;
+  background-color: var(--color-gray-200);
+  font-weight: 500;
+  font: var(--text-label-large);
+  border-radius: 9999px;
+}
+
+.header__search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+}
+
+.header__search-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.header__search-input::placeholder {
+  color: var(--color-gray-950);
+}
+
+.header__search-input:hover {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.header__user {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: end;
+  width: 18.75rem;
+  color: var(--color-gray-950);
+  font: var(--text-label-large);
+}
+
+.header__user-wrap {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+
+  & > svg {
+    fill: var(--color-grey-950);
+    transition: fill 0.2s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      fill: var(--color-primary-600);
+    }
+  }
+}
+
+/* 컨테이너 스타일 시작 */
+.container {
+  display: flex;
+  flex: 1;
+  width: 100%; /* flex: 1이 body의 flex 자식으로서 높이를 관리하므로 height: 100%는 필요 없을 수 있음 */
+}
+
+/* 메인컨텐트 */
+.main__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-left: 5.25rem; 
+}
+/* 메인컨텐트 스타일 끝 */
+
+
+/* 검색모달 시작 */
+.modal {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  visibility: hidden; /* 기본 숨김 */
+  background-color: rgba(0, 0, 0, 0.3);
+  /* 백드롭 페이드 효과 */
+  opacity: 0; /* 기본 투명 */
+  transition: opacity 0.2s ease-in-out, visibility 0s linear 0.2s; /* 숨길 때 visibility는 지연 */
+}
+
+.modal--show {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s; /* 보일 때 지연 없음 */
+}
+
+.modal__dialog {
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  width: 60rem;
+  height: fit-content;
+  max-height: 50rem;
+  background-color: var(--color-white);
+  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; /* 애니메이션 적용 */
+  transform: translateY(5rem); /* 애니메이션 시작 위치 (살짝 아래) */
+  opacity: 0; /* 애니메이션 시작 시 투명 */
+  border-radius: 1rem; 
+}
+
+.modal--show .modal__dialog {
+  /* 모달이 헤더에서부터 내려오는 애니메이션 효과 */
+  /* transition: transform 0.2s ease-in-out; 이미 .modal__dialog에 정의됨 */
+  transform: translateY(6rem);
+  opacity: 1;
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  font-weight: 500;
+  font: var(--text-title-medium);
+}
+
+.modal__close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.modal__body {
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: column;
+  height: 100%;
+}
+
+.search__recents {
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 1rem;
+  max-height: calc(2.5rem * 10); /* 최근검색어 10개 표시 (스크롤) */
+  overflow-y: auto;
+}
+
+.search__recent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 1px solid var(--color-gray-300);
+  height: 2.5rem;
+  font: var(--text-body-medium);
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.search__result {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  padding: 0 1rem;
+}
+
+.search__filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search__filter.button--disabled:hover {
+  cursor: pointer;
+  color: var(--color-white);
+}
+
+/* 검색모달 끝 */
+
+/* 페이지네이션 공통 클래스 시작 */
+.pagination {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.pagination__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination__prev,
+.pagination__next {
+  & > svg > path {
+    fill: var(--color-gray-400);
+  }
+  cursor: pointer;
+}
+
+.pagination__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  color: var(--color-gray-950);
+  font: var(--text-label-large);
+
+  &.pagination__item--active,
+  &:hover,
+  &:focus,
+  &:active {
+    font-weight: 700;
+    color: var(--color-blue-600);
+    cursor: pointer;
+  }
+}
+
+.pagination__item::after {
+  content: attr(title);
+  display: block;
+  font: var(--text-label-large);
+  height: 0px;
+  visibility: hidden;
+}
+/* 페이지네이션 공통 클래스 끝 */
+
+menu,
+ol,
+ul {
+  list-style: none;
+}
+
+/* 이미지 기본 스타일 */
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   3. 컴포넌트: 버튼 (Button)
+   ========================================================================== */
+
+/* == Block: button == */
+/* 버튼 기본 스타일 : medium */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2); /* 0.5rem */
+  vertical-align: middle;
+  border-radius: var(--border-radius-base);
+  border: var(--border-width-base) solid transparent; /* 기본: 테두리 투명, 타입별 오버라이드 */
+  cursor: pointer;
+  transition: background-color var(--transition-base), border-color var(--transition-base), color var(--transition-base),
+    box-shadow var(--transition-base);
+  font: var(--text-label-large); /* 기본: medium size 폰트 */
+  min-width: 2rem;
+  height: 2rem; /* 기본: medium size 높이 */
+  padding: 0 var(--space-4); /* 기본: medium size 좌우 패딩 */
+  color: var(--color-white); /* 기본 텍스트 색상 (primary, secondary 기준) */
+  background-color: transparent; /* 기본 배경 투명, 타입별로 오버라이드 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+/* -- Element: button__icon (버튼 내부 아이콘 래퍼) -- */
+.button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button__icon svg {
+  /* 아이콘 버튼 내부 아이콘 래퍼: 버튼 content box 채움 */
+  /* .button--icon > .button__icon 에 적용되던 스타일을 여기로 통합 */
+  width: 100%;
+  height: 100%;
+  fill: currentColor; /* 기본적으로 텍스트 색상 따름 */
+}
+/* 검색 모달 내 검색 버튼 아이콘 색상 (스프라이트 사용 시) */
+.header__search-bar .button--info.button--round svg.icon {
+  /* stroke="currentColor"이고 버튼 텍스트 색상이 white이므로, 자동으로 흰색 stroke 적용됨 */
+  /* fill: none; 은 symbol에 이미 적용되어 있음 (스프라이트 아이콘 특성) */
+}
+/* -- Modifier: 버튼 타입 (Type) -- */
+.button--primary {
+  background-color: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+  color: var(--color-text-on-primary);
+}
+.button--secondary {
+  background-color: var(--color-secondary-600);
+  border-color: var(--color-secondary-600);
+  color: var(--color-text-on-primary);
+}
+.button--line-primary {
+  border-color: var(--color-primary-600);
+  color: var(--color-text-link);
+}
+.button--line-secondary {
+  border-color: var(--color-secondary-600);
+  color: var(--color-secondary-600);
+}
+.button--ghost {
+  color: var(--color-text-default);
+  padding: 0 var(--space-2); /* Ghost 버튼: 패딩 축소 */
+}
+.button--info {
+  background-color: var(--color-blue-600);
+  border-color: var(--color-blue-600);
+  color: var(--color-text-on-primary);
+}
+.button--icon {
+  padding: var(--space-1); /* 아이콘 버튼: 패딩 */
+  width: 2rem; /* 아이콘 버튼: medium size 크기 고정 */
+  border-color: transparent; /* 아이콘 버튼은 테두리 없음 */
+  background-color: transparent;
+  color: var(--color-gray-50);
+}
+.button--round {
+  border-radius: 9999px;
+  padding: 0;
+  /* 크기는 size modifier 사용 */
+}
+.button--text {
+  padding: 0 var(--space-1);
+  height: auto;
+  color: var(--color-text-link);
+  border-color: transparent;
+  background-color: transparent;
+}
+/* .button 기본이 medium 사이즈 */
+.button--small {
+  font: var(--text-label-medium);
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 var(--space-3); /* 0.75rem */
+}
+.button--xsmall {
+  font: var(--text-label-small);
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 var(--space-2); /* 0.5rem */
+}
+.button--icon.button--small {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+}
+.button--icon.button--xsmall {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  padding: var(--space-1) !important; /* xsmall 아이콘 버튼: 패딩 고정 */
+  box-sizing: border-box !important;
+}
+/* 원형 버튼 내부 아이콘 크기 조정 예시 */
+.button--round .button__icon svg {
+  width: 60%;
+  height: 60%;
+}
+.button:hover {
+  filter: brightness(1.1); /* 기본 호버: 밝기 조정, 타입별 오버라이드 */
+}
+.button:focus-visible {
+  outline: 0.125rem solid transparent; /* 고대비 모드 대비 */
+  box-shadow: var(--shadow-outline-primary); /* 기본: Primary 아웃라인 */
+  outline-offset: 0.0625rem;
+}
+/* 타입별 호버/포커스 상태 */
+.button--primary:hover {
+  background-color: var(--color-primary-400);
+  border-color: var(--color-primary-400);
+  filter: none;
+}
+.button--primary:focus-visible {
+  background-color: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  box-shadow: var(--shadow-outline-primary);
+}
+.button--secondary:hover {
+  background-color: var(--color-secondary-400);
+  border-color: var(--color-secondary-400);
+  filter: none;
+}
+.button--secondary:focus-visible {
+  background-color: var(--color-secondary-500);
+  border-color: var(--color-secondary-500);
+  box-shadow: var(--shadow-outline-secondary);
+}
+.button--line-primary:hover,
+.button--line-primary:focus-visible {
+  background-color: var(--color-primary-50);
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-500);
+  filter: none;
+}
+.button--line-primary:focus-visible {
+  box-shadow: var(--shadow-outline-primary);
+}
+.button--line-secondary:hover,
+.button--line-secondary:focus-visible {
+  background-color: var(--color-secondary-50);
+  border-color: var(--color-secondary-500);
+  color: var(--color-secondary-500);
+  filter: none;
+}
+.button--line-secondary:focus-visible {
+  box-shadow: var(--shadow-outline-secondary);
+}
+.button--ghost:hover,
+.button--ghost:focus-visible {
+  background-color: var(--color-gray-100);
+  filter: none;
+}
+.button--ghost:focus-visible {
+  box-shadow: 0 0 0 0.125rem var(--color-gray-200);
+} /* 2px -> 0.125rem, 다른 아웃라인 */
+.button--ghost.button--icon:hover .button__icon svg,
+.button--ghost.button--icon:focus-visible .button__icon svg {
+  fill: var(--color-red-600);
+}
+.button--text:hover,
+.button--text:focus-visible {
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-700);
+  filter: none;
+}
+.button--text:focus-visible {
+  box-shadow: var(--shadow-outline-primary);
+}
+.button:disabled,
+.button--disabled {
+  /* 클래스로도 비활성화 제어 */
+  background-color: var(--color-background-disabled);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  outline: none;
+  box-shadow: none;
+  filter: none;
+}
+.button--line-primary:disabled,
+.button--line-primary.button--disabled,
+.button--line-secondary:disabled,
+.button--line-secondary.button--disabled,
+.button--ghost:disabled,
+.button--ghost--disabled,
+.button--text:disabled,
+.button--text--disabled {
+  background-color: transparent; /* 라인/고스트/텍스트 비활성화: 배경 없음 유지 */
+  border-color: var(--color-gray-300); /* 라인 비활성화: 테두리 색상 변경 */
+  color: var(--color-text-disabled); /* 텍스트 색상 변경 */
+}
+.button:disabled .button__icon svg,
+.button--disabled .button__icon svg {
+  fill: var(--color-text-disabled);
+}
+
+/* 버튼 내 텍스트와 함께 사용되는 SVG 아이콘 */
+.button svg {
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: -0.15em; /* 텍스트와 함께 있을 때 수직 정렬 미세 조정 */
+}
+/* ==========================================================================
+   4. 컴포넌트: 모달 (Dialog)
+   ========================================================================== */
+.dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: var(--border-radius-lg);
+  padding: 0; /* 내부 content에서 패딩 제어 */
+  min-width: 40rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden; /* 내부 스크롤 제어 */
+  background-color: var(--color-background-default);
+}
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+.dialog__content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 내부 스크롤 제어 */
+  font: var(--text-body-medium);
+  color: var(--color-text-default);
+  width: 100%;
+}
+
+/* -- Element: dialog__header -- */
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  flex-shrink: 0; /* 높이 축소 안 함 */
+  border-bottom: var(--border-width-base) solid var(--color-border-subtle);
+}
+.dialog__title {
+  font: var(--text-title-large);
+  color: var(--color-text-default);
+}
+.dialog__close-button {
+  /* .button, .button--ghost, .button--icon 클래스 조합 사용 */
+}
+.dialog__body {
+  padding: var(--space-6);
+  overflow-y: auto; /* 내용 많으면 수직 스크롤 */
+  flex-grow: 1; /* 남은 공간 채우기 */
+}
+
+.dialog__footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: var(--border-width-base) solid var(--color-border-subtle);
+  display: flex;
+  justify-content: center; /* 기본 중앙 정렬 */
+  gap: var(--space-3);
+  flex-shrink: 0; /* 높이 축소 안 함 */
+}
+.dialog__footer--align-right {
+  justify-content: flex-end;
+}
+.dialog__footer--align-left {
+  justify-content: flex-start;
+}
+
+/* ==========================================================================
+     5. 컴포넌트: 폼 (Form) - 모달 내부
+     ========================================================================== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4); /* 필드 간 간격 (행 간격) */
+}
+.field {
+  display: flex;
+  align-items: flex-start; /* 기본: 라벨, 컨트롤 상단 정렬 */
+  gap: var(--space-4); /* 라벨과 컨트롤 래퍼 사이 간격 */
+}
+.field--vertical {
+  flex-direction: column;
+  align-items: stretch; /* 내부 요소 너비 100% 채움 */
+  gap: var(--space-0); /* 라벨-컨트롤 래퍼 간격 축소 */
+}
+
+.field__label {
+  display: flex;
+  align-items: center;
+  font: var(--text-label-large);
+  color: var(--color-text-default);
+  min-width: var(--form-label-min-width, 8rem); /* 최소 너비, JS에서 동적 계산 가능 */
+  height: 2rem; /* 컨트롤 높이와 맞춤 */
+  cursor: pointer;
+  flex-shrink: 0; /* 너비 축소 안 함 */
+}
+.field--vertical .field__label {
+  min-width: auto; /* 세로 배치: 라벨 너비 자동 */
+  margin-bottom: 0.5rem;
+}
+.field--vertical .field__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-1); /* 컨트롤과의 간격 조정 */
+}
+.field__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.field__label--group {
+  cursor: default; /* 그룹 라벨은 클릭 대상 아님 */
+}
+
+/* -- Element: field__required-mark -- */
+.field__required-mark {
+  color: var(--color-text-error);
+  margin-left: var(--space-1);
+}
+.field__error-message {
+  display: none; /* 기본: 숨김 */
+  font: var(--text-body-small);
+  color: var(--color-text-error);
+  width: 100%;
+}
+.field--invalid .field__error-message {
+  display: block; /* 유효성 실패: 오류 메시지 보임 */
+}
+.field--invalid .input,
+.field--invalid .textarea,
+.field--invalid .select,
+.field--invalid .control-group--invalid-item {
+  /* 그룹 내 개별 아이템도 강조 */
+  border-color: var(--color-border-error) !important; /* 다른 상태보다 우선 */
+}
+.field--invalid .input:focus,
+.field--invalid .textarea:focus,
+.field--invalid .select:focus {
+  border-color: var(--color-border-error) !important;
+  box-shadow: var(--shadow-outline-error) !important;
+  outline: none;
+}
+.field__control-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* 남는 공간 모두 차지 */
+  min-width: 0; /* flex 아이템 너비 계산 문제 방지 */
+  gap: var(--space-1); /* 0.25rem, 컨트롤과 에러 메시지 사이 간격 */
+}
+/* 컨트롤 래퍼 내부의 주요 컨트롤 요소들은 너비 100% 차지 */
+.field__control-wrapper > .input,
+.field__control-wrapper > .textarea,
+.field__control-wrapper > .select,
+.field__control-wrapper > .control-group {
+  width: 100%; /* 컨트롤 래퍼 내부 요소: 너비 100% */
+}
+.field--disabled {
+  /* 필드 비활성화 시 컨테이너 스타일 */
+}
+/* ==========================================================================
+     6. 컴포넌트: 폼 컨트롤 (Component: Form Controls)
+     ========================================================================== */
+/* == Blocks: .input, .textarea, .select (공통 스타일) == */
+.input,
+.textarea,
+.select {
+  display: block;
+  width: 100%;
+  font: var(--text-body-medium);
+  color: var(--color-text-default);
+  border: var(--border-width-base) solid var(--color-border-default);
+  border-radius: var(--border-radius-base); /* 버튼과 통일 */
+  padding: var(--space-1) var(--space-3); /* 상하 4px, 좌우 12px */
+  background-color: var(--color-background-default);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  overflow: hidden; /* 넘치는 내용 숨김 (ellipsis/clamp용) */
+  text-overflow: ellipsis; /* input 기본 말줄임표 */
+  white-space: nowrap; /* input 기본 한 줄 처리 */
+}
+.input {
+  height: 2rem;
+}
+.input[type="number"]::-webkit-outer-spin-button,
+.input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+/* --- 날짜/시간 관련 input 플레이스홀더를 위한 부모 요소 상대 위치 설정 --- */
+.input[type="date"],
+.input[type="datetime-local"],
+.input[type="month"],
+.control-group--date-range .input:not([type="number"]) { /* date-range 내 number 타입 input 제외 */
+  position: relative; /* ::before 가상 요소의 absolute 위치 기준점 */
+}
+/* --- 날짜/시간 관련 input 플레이스홀더 스타일링 --- */
+/* 기본 플레이스홀더 (::before 가상 요소 사용) */
+.input[type="date"]::before,
+.input[type="datetime-local"]::before,
+.input[type="month"]::before,
+.control-group--date-range .input:not([type="number"])::before {
+  content: attr(data-placeholder); /* data-placeholder 속성 값 사용 */
+  color: var(--color-text-secondary);
+  position: absolute;
+  left: var(--space-3); /* input 내부 텍스트 시작 위치와 동일하게 */
+  top: 50%; /* 수직 중앙 정렬 */
+  transform: translateY(-50%); /* 수직 중앙 정렬 보정 */
+  pointer-events: none; /* 플레이스홀더 위로 클릭 통과 */
+  max-width: calc(100% - var(--space-3) - var(--space-3) - 1.5em); /* 좌우 패딩 및 아이콘 공간 제외한 최대 너비 */
+  overflow: hidden; /* 내용 넘칠 시 숨김 */
+  text-overflow: ellipsis; /* 말줄임표 처리 */
+  white-space: nowrap; /* 한 줄로 표시 */
+}
+
+/* 값이 있거나 포커스 시 커스텀 플레이스홀더 숨김 */
+.input[type="date"].has-value::before,
+.input[type="date"]:focus::before, 
+.input[type="datetime-local"].has-value::before,
+.input[type="datetime-local"]:focus::before,
+.input[type="month"].has-value::before,
+.input[type="month"]:focus::before, /* month 타입은 placeholder-shown으로 구분 어려움 */
+.control-group--date-range .input:not([type="number"]).has-value::before,
+.control-group--date-range .input:not([type="number"]):focus::before {
+  display: none;
+}
+
+/* 
+  값이 없을 때 (has-value 클래스 없음) 그리고 포커스되지 않았을 때만
+  브라우저 기본 텍스트 투명 처리.
+  커스텀 ::before 플레이스홀더만 보이도록 하기 위함.
+*/
+.input[type="date"]:not(.has-value):not(:focus),
+.input[type="datetime-local"]:not(.has-value):not(:focus),
+.input[type="month"]:not(.has-value):not(:focus),
+.control-group--date-range .input:not([type="number"]):not(.has-value):not(:focus) {
+  color: transparent !important;
+}
+
+/* 
+  값이 있거나 (has-value), 또는 포커스 되었을 때
+  실제 입력 값 또는 브라우저 UI 텍스트 색상 기본값으로.
+  :placeholder-shown은 date 타입에서 신뢰도가 낮으므로 :focus를 주로 사용.
+*/
+.input[type="date"].has-value,
+.input[type="date"]:focus,
+.input[type="datetime-local"].has-value,
+.input[type="datetime-local"]:focus, /* ✨ 포커스 시 무조건 글자색 복원 */
+.input[type="month"].has-value, 
+.input[type="month"]:focus, /* ✨ 포커스 시 무조건 글자색 복원 */
+.control-group--date-range .input:not([type="number"]).has-value,
+.control-group--date-range .input:not([type="number"]):focus {
+  color: var(--color-text-default);
+}
+.textarea {
+  min-height: 5rem;
+  resize: vertical;
+  line-height: var(--line-height-normal);
+  white-space: pre-wrap; /* textarea는 줄바꿈 유지 */
+}
+.select {
+  height: 2rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: 1em 1em;
+  padding-right: calc(var(--space-3) + 1em + var(--space-2)); /* 우측 패딩: 화살표 공간 확보 */
+}
+.select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 var(--color-gray-900);
+}
+.select::-moz-focus-inner {
+  border: 0;
+}
+.field__readonly-value {
+  padding: var(--space-0) var(--space-3); /* input/textarea 패딩과 유사하게 */
+  line-height: 2rem; /* input 높이와 맞춤 */
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-disabled);
+  border-radius: var(--border-radius-base);
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden; /* clamp 처리용 */
+}
+/* --- 컨트롤 상태 (Hover, Focus, Disabled, Readonly) --- */
+/* Hover 상태 */
+.input:not(:disabled):not([readonly]):hover,
+.textarea:not(:disabled):not([readonly]):hover,
+.select:not(:disabled):hover {
+  border-color: var(--color-border-focus); /* 호버: 포커스 색상과 유사하게 */
+}
+.input:not(:disabled):not([readonly]):focus,
+.textarea:not(:disabled):not([readonly]):focus,
+.select:not(:disabled):focus {
+  outline: 0.125rem solid transparent; /* 고대비 모드 대비 */
+  border-color: var(--color-border-focus);
+  box-shadow: var(--shadow-outline-primary);
+  outline: none;
+}
+.input[readonly],
+.textarea[readonly] {
+  background-color: var(--color-background-disabled);
+  white-space: pre-wrap; /* readonly textarea: 줄바꿈 유지 */
+  color: var(--color-text-secondary);
+  cursor: default;
+  border-color: var(--color-border-subtle);
+}
+.input[readonly]:focus,
+.textarea[readonly]:focus {
+  box-shadow: none; /* readonly: 포커스 효과 없음 */
+}
+.input:disabled,
+.input--disabled,
+.textarea:disabled,
+.textarea--disabled,
+.select:disabled,
+.select--disabled {
+  background-color: var(--color-background-disabled);
+  white-space: pre-wrap; /* disabled textarea: 줄바꿈 유지 */
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  border-color: var(--color-border-subtle);
+}
+.select:disabled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23d1d5db'%3E%3Cpath fill-rule='evenodd' d='M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z' clip-rule='evenodd' /%3E%3C/svg%3E");
+}
+/* 읽기 전용 textarea (pre 태그로 렌더링된 경우) clamp 처리 */
+.field__readonly-value--textarea {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 기본: 3줄 말줄임 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+} /* 개선: JS로 clamp 처리 또는 더 많은 줄 보기 옵션 제공 고려 */
+/* == Block: control-group (라디오, 체크박스, 인풋 그룹 등) == */
+.control-group {
+  display: flex;
+  flex-wrap: wrap; /* 여러 줄 허용 */
+  align-items: center;
+  gap: var(--space-3) var(--space-6); /* 상하 0.75rem, 좌우 1.5rem 간격 */
+  min-height: 2rem; /* 최소 높이: input과 동일하게 */
+}
+.control-group--radio,
+.control-group--checkbox {
+  /* 라디오/체크박스 그룹 스타일 */
+}
+.control-group--input {
+  gap: var(--space-2); /* 인풋 그룹: 간격 축소 */
+}
+.control-group--date-range {
+  gap: var(--space-2); /* 날짜 범위 그룹: 간격 축소 */
+}
+.control-group__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2); /* 0.5rem */
+  font: inherit;
+  color: var(--color-text-default);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.control-group__input {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-primary-600);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.control-group--input .input,
+.control-group--input .select,
+.control-group--date-range .input {
+  flex: 1; /* 그룹 내 input/select: 기본적으로 남는 공간 차지 */
+  min-width: 5rem;
+}
+.control-group__label-text {
+  /* 라디오/체크박스 라벨 텍스트 */
+}
+.control-group__separator {
+  color: var(--color-gray-600);
+  flex-shrink: 0; /* 너비 축소 방지 */
+  padding: 0 var(--space-1); /* 0.25rem */
+}
+
+/* -- Modifier: 아이템/그룹 비활성화 상태 -- */
+.control-group__item--disabled {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+.control-group__item--disabled .control-group__input {
+  cursor: not-allowed;
+  accent-color: var(--color-text-disabled);
+}
+.control-group--disabled .control-group__item {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+.control-group--disabled .control-group__input {
+  cursor: not-allowed;
+  accent-color: var(--color-text-disabled);
+}
+/* == Block: checkbox (단일 체크박스, label이 input과 text를 감쌈) == */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--text-body-medium);
+  color: var(--color-text-default);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.checkbox__input {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-primary-600);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.checkbox__label-text {
+  /* 단일 체크박스 라벨 텍스트 */
+}
+.checkbox--disabled {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+.checkbox--disabled .checkbox__input {
+  cursor: not-allowed;
+  accent-color: var(--color-text-disabled);
+}
+
+/* ==========================================================================
+     7. 컴포넌트: 테이블 (Table) - 모달 내부
+     ========================================================================== */
+/* == Block: table == */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--text-body-medium);
+  table-layout: fixed; /* 셀 너비 고정: 성능 및 레이아웃 예측 용이 */
+  border-top: var(--border-width-base) solid var(--color-border-default);
+}
+.table--auto-width {
+  table-layout: auto;
+}
+.table__header {
+  /* background-color: var(--color-gray-50); */ /* 헤더 배경색 */
+}
+.table__body .table__row:hover {
+  background-color: var(--color-gray-50);
+}
+.table__row--no-data {
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+.table__row--no-data:hover {
+  background-color: transparent; /* 데이터 없음 행: 호버 효과 제거 */
+}
+.table__head-cell {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width-base) solid var(--color-border-default);
+  text-align: center;
+  font: var(--text-label-large);
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+.table__cell {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width-base) solid var(--color-border-subtle);
+  color: var(--color-text-default);
+  word-break: break-word;
+  vertical-align: middle;
+  text-align: center;
+}
+.table__cell--align-left,
+.table__head-cell--align-left {
+  text-align: left;
+}
+.table__cell--align-center,
+.table__head-cell--align-center {
+  text-align: center;
+}
+.table__cell--align-right,
+.table__head-cell--align-right {
+  text-align: right;
+}
+/* 테이블 내 버튼 스타일 조정 */
+.table__cell .button {
+  vertical-align: middle;
+}
+.table__cell a {
+  color: var(--color-text-link);
+  text-decoration: none;
+}
+.table__cell a:hover {
+  text-decoration: underline;
+}
+.table__cell a:visited {
+  color: var(--color-purple-600);
+}
+/* 스크린 리더 전용 숨김 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+/* ==========================================================================
+     8. 유틸리티: 스크롤바 (Scrollbar) - iOS 스타일
+     ========================================================================== */
+/* .dialog__body,
+.table-wrapper */
+.scroll--common {
+  /* 테이블 스크롤용 래퍼 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent; /* Firefox: thumb track */
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.scroll--common::-webkit-scrollbar {
+  width: 0.375rem;
+  height: 0.375rem;
+}
+
+.scroll--common::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll--common::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.1875rem;
+}
+.scroll--common::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.scroll--common::-webkit-scrollbar-button {
+  display: none; /* Webkit: 스크롤바 버튼 숨김 */
+}
+/* ==========================================================================
+     9. 유틸리티: 기타 (Miscellaneous Utilities)
+     ========================================================================== */
+/* 숨겨진 파일 입력 필드 (JS 트리거용) */
+.file-input-hidden {
+  display: none !important;
+}
+
+/* 이미지 업로드 필드 내부의 실제 <input type="file"> 숨기기 */
+.image-upload-field__input {
+  display: none !important;
+}
+/* --- 폼 레이아웃 헬퍼 클래스 --- */
+.form--layout-2-column-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 기본 2컬럼 */
+  gap: var(--space-4) 2.5rem; /* 행간격 1rem (var(--space-4)), 컬럼간격 2.5rem */
+  align-items: start; /* 필드 높이가 다를 경우 상단 정렬 */
+}
+.dialog .form {
+  width: 100%; /* 폼: 부모(.dialog__body) 너비 채움 */
+}
+.dialog .form .field {
+  /* margin-bottom: 1rem; */ /* 부모 form의 gap으로 대체됨 */
+}
+.form--layout-2-column-grid > .field {
+  width: auto; /* 2컬럼 그리드: 필드 너비는 grid-template-columns 따름 */
+}
+.form--layout-mixed-flex > .field {
+  /* 혼합 플렉스: 필드 너비는 flexStyle로 제어 */
+}
+.form--layout-mixed-flex {
+  row-gap: var(--space-4); /* 혼합 플렉스: 행 간격 추가 */
+}
+/* --- 이미지 업로드 필드 (Image Upload Field) --- */
+.image-upload-field-content {
+  display: flex;
+  justify-content: center; /* 이미지 업로드 내용: 수평 중앙 정렬 */
+  width: 100%;
+}
+.image-upload-field-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.image-upload-field__preview-container {
+  width: 100%; /* 부모 요소 너비에 맞춤 */
+  max-width: 30rem; /* 너무 커지지 않도록 최대 너비 설정 (예시) */
+  aspect-ratio: 16 / 9; /* 기본 16:9 비율 (템플릿에서 커스텀 가능) */
+  border: 2px dashed var(--color-border-default); /* 점선 테두리 */
+  border-radius: var(--border-radius-base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 이미지가 컨테이너를 넘지 않도록 */
+  background-color: var(--color-background-subtle); /* 배경색 */
+  position: relative; /* 플레이스홀더 아이콘 위치 기준 */
+}
+.image-upload-field__preview-container--dragover {
+  border-color: var(--color-border-focus); /* 드래그 오버 시 테두리 색상 변경 */
+  background-color: var(--color-background-selected); /* 선택된 배경색과 유사하게 */
+}
+.image-upload-field__preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover; /* 이미지가 비율 유지하며 꽉 차도록 */
+  display: none; /* 기본 숨김 */
+}
+.image-upload-field__placeholder {
+  display: flex; /* 기본 표시 (아이콘/텍스트 중앙 정렬용) */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-size: 0.875rem;
+}
+.image-upload-field__placeholder .button__icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.5rem;
+}
+.image-upload-field__actions {
+  display: flex;
+  gap: 0.5rem; /* 버튼 사이 간격 */
+}
+.image-upload-field__select-button,
+.image-upload-field__remove-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem; /* 아이콘-텍스트 간격 */
+}
+.image-upload-field__select-button .button__icon,
+.image-upload-field__remove-button .button__icon {
+  width: 1em; /* 아이콘 크기: 텍스트에 맞춤 */
+}
+
+/* 개발자용 명령어 팔레트 리스트 아이템 스타일 */
+#command-palette-list li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+#command-palette-list li:hover,
+#command-palette-list li.selected {
+  background-color: #3b82f6; /* Tailwind blue-500 */
+}
+/* 명령어 팔레트 검색어 하이라이트 스타일 */
+#command-palette-list li strong {
+  color: #facc15; /* Tailwind yellow-400, 눈에 띄는 색으로! */
+  font-weight: bold; /* 기본 strong 스타일이지만 명시적으로 */
+}

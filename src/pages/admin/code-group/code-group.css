@@ -1,0 +1,124 @@
+.page-layout.admin-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.5rem;
+}
+
+.search-panel {
+  width: 100%;
+  display: flex;
+  padding: 1rem 2rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  border: 0.025rem solid var(--color-primary-600);
+}
+
+.search-panel__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 2.5rem;
+  border: 0.025rem solid var(--color-primary-600);
+}
+
+.search-panel__input {
+  width: 100%;
+  font: var(--text-body-medium);
+  outline: none;
+  padding: 0.5rem;
+  border-radius: 0.125rem 0 0 0.125rem;
+  height: 100%;
+}
+
+.admin__search-button {
+  width: auto;
+  height: 100%;
+  display: flex;
+  padding: 0.5rem 1rem;
+  justify-content: center;
+  align-items: center;
+
+  background: var(--color-primary-600);
+  border-radius: 0 0.125rem 0.125rem 0;
+  cursor: pointer;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.search-panel__filter-bar {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0.25rem 1rem;
+  background-color: var(--color-tertiary-600);
+}
+
+.admin__search-filter-label {
+  width: 8%;
+  font: var(--text-label-large);
+  color: var(--color-black);
+  white-space: nowrap;
+}
+
+.search-panel__filter-options.checkbox-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 20px;
+  flex: 1 0 0;
+}
+
+.content-area--split-view {
+  border: 1px solid var(--color-gray-600);
+}
+
+.section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section__header-title {
+  font: var(--text-title-medium);
+  color: var(--color-black);
+}
+
+.checkbox-group {
+  /* display: flex; 등은 search-panel__filter-options 에서 이미 처리 */
+}
+.checkbox-item {
+  /* 개별 체크박스 아이템 스타일 */
+}
+.checkbox-item__input {
+  /* input 스타일 */
+}
+.checkbox-item__label {
+  /* label 스타일 */
+}
+
+.form-layout {
+  /* 상세 정보 폼 전체 레이아웃 */
+}
+.form-field {
+  margin-bottom: 1rem; /* 필드 간 간격 예시 */
+}
+.form-field__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+/* .form-field__input, .form-field__textarea 등은 기존 .input, .textarea 스타일 상속 또는 개별 정의 */

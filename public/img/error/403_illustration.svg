@@ -1,0 +1,20 @@
+<svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+    <rect width="240" height="180" fill="#f0f0f0" rx="8"/>
+    
+    <g transform="translate(75 60)"> 
+        <rect width="80" height="80" rx="5" fill="#00377c"/>
+        <rect x="10" y="10" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <rect x="10" y="28" width="60" height="10" rx="2" fill="#5D6D7E"/> 
+        <rect x="10" y="46" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <circle cx="18" cy="68" r="3" fill="#b3d334" opacity="0.7"/>
+        <circle cx="30" cy="68" r="3" fill="#b3d334"/>
+    </g>
+
+    <g transform="translate(155 115) scale(1.4)"> 
+        <circle cx="0" cy="0" r="18" fill="#E57373" stroke="white" stroke-width="1.5"/>
+        <rect x="-10" y="-2.5" width="20" height="5" fill="white" rx="1.5"/>
+    </g>
+
+    <text x="120" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#00377c" text-anchor="middle">403</text>
+    <text x="120" y="165" font-family="Arial, sans-serif" font-size="14" fill="#00377c" text-anchor="middle">접근이 금지되었습니다</text>
+</svg>

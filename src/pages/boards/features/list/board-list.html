@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/css/vars.css" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/pages/boards/features/list/board-list.css" />
+  </head>
+  <body>
+    <div class="board-list">
+      <!-- 게시판 리스트 영역 -->
+      <div class="board-list__table-wrap">
+        <div class="board-list__filter-row">
+          <div class="control-group control-group--input">
+            <select class="select" style="width: 100%; max-width: 120px">
+              <option value="title">제목</option>
+              <option value="writer">작성자</option>
+            </select>
+            <div class="input board-list__input-search-wrap">
+              <input type="text" placeholder="검색어를 입력하세요" style="width: 100%; outline: none" />
+              <button type="button" class="board-list__search-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+                  <path
+                    d="M21 21L16.657 16.657M16.657 16.657C17.3999 15.9141 17.9892 15.0322 18.3912 14.0615C18.7933 13.0909 19.0002 12.0506 19.0002 11C19.0002 9.94939 18.7933 8.90908 18.3912 7.93845C17.9892 6.96782 17.3999 6.08588 16.657 5.34299C15.9141 4.6001 15.0322 4.01081 14.0615 3.60877C13.0909 3.20672 12.0506 2.99979 11 2.99979C9.94939 2.99979 8.90908 3.20672 7.93845 3.60877C6.96782 4.01081 6.08588 4.6001 5.34299 5.34299C3.84266 6.84332 2.99979 8.87821 2.99979 11C2.99979 13.1218 3.84266 15.1567 5.34299 16.657C6.84332 18.1573 8.87821 19.0002 11 19.0002C13.1218 19.0002 15.1567 18.1573 16.657 16.657Z"
+                    stroke="black"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="board-list__sort-group">
+            <button type="button" class="board-list__sort-option board-list__sort-option--active">
+              <span class="board-list__sort-bullet"></span>최신순
+            </button>
+            <button type="button" class="board-list__sort-option"><span class="board-list__sort-bullet"></span>조회순</button>
+          </div>
+        </div>
+        <table class="table table--auto-width">
+          <thead>
+            <tr>
+              <th class="table__head-cell">No</th>
+              <th class="table__head-cell">제목</th>
+              <th class="table__head-cell">작성일</th>
+              <th class="table__head-cell">조회수</th>
+            </tr>
+          </thead>
+          <tbody class="table__body board-list__table-body">
+            <!-- 게시글 목록은 JavaScript에서 동적으로 생성됩니다 -->
+          </tbody>
+        </table>
+        <div class="board-list__write-btn-wrap">
+          <button type="button" class="button button--primary button--small">글쓰기</button>
+        </div>
+      </div>
+      <div class="pagination board-list__pagination">
+        <!-- 이전 페이지 -->
+        <button class="pagination__prev board-list__pagination-prev">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.9087 12L16 17.0913L14.5456 18.5456L8 12L14.5456 5.45435L16 6.9087L10.9087 12Z" fill="#BABABA" />
+          </svg>
+        </button>
+        <div class="pagination__list board-list__pagination-list">
+          <!-- 페이지 번호는 JavaScript에서 동적으로 생성됩니다 -->
+        </div>
+        <button class="pagination__next board-list__pagination-next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.0913 12L8 17.0913L9.45436 18.5456L16 12L9.45436 5.45435L8 6.9087L13.0913 12Z" fill="#BABABA" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- JavaScript 파일 연결 -->
+    <script type="module" src="/src/pages/boards/features/list/board-list.js"></script>
+  </body>
+</html>

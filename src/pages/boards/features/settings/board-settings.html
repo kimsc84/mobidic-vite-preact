@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/css/vars.css" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/pages/boards/features/settings/board-settings.css" />
+</head>
+<body>
+  <div class="board-settings">
+    <div class="board-settings__attachments">
+        <div class="board-settings__attachments-title">
+          <span>첨부파일</span>
+          <button class="button button--primary button--small">
+            추가
+          </button>
+        </div>
+        <ul class="board-settings__attachments-list scroll--common">
+          <li class="board-settings__attachments-empty">데이터가 없습니다</li>
+        </ul>
+    </div>
+    <!-- 게시 대상 -->
+    <div class="board-settings__target">
+      <label class="board-settings__target-title">게시 대상</label>
+      <div class="field__control-wrapper">
+        <div class="multiselect-container">
+          <div class="multiselect-input">
+            <div class="multiselect-tags">
+              <!-- 선택된 태그들이 여기에 동적으로 추가됩니다 -->
+              <div class="multiselect-placeholder">게시 대상 선택...</div>
+            </div>
+            <div class="multiselect-arrow">
+              <svg width="24" height="24" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" fill="currentColor"/>
+              </svg>
+            </div>
+          </div>
+          <div class="multiselect-dropdown">
+            <div class="multiselect-actions">
+              <button class="multiselect-action-btn select-all">전체 추가</button>
+              <button class="multiselect-action-btn deselect-all">전체 삭제</button>
+            </div>
+            <ul class="multiselect-options scroll--common">
+              <!-- 옵션들이 여기에 동적으로 추가됩니다 -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board-settings__popup">
+      <span class="board-settings__popup-title">메인화면 팝업 등록</span>
+      <div class="board-settings__popup-settings">
+        <!-- 팝업 사용 여부 -->
+        <div class="control-group">
+          <label class="control-group__item">
+            <input type="checkbox" name="usePopup" class="control-group__input">
+            <span class="control-group__label-text">팝업 사용</span>
+          </label>
+        </div>
+        <!-- 게시 기간 -->
+        <div class="field">
+          <label class="field__label">팝업 기간</label>
+          <div class="field__control-wrapper">
+            <div class="control-group control-group--date-range">
+              <input type="date" class="input has-value" name="popupStartDate" data-placeholder="시작일">
+              <span class="control-group__separator">~</span>
+              <input type="date" class="input has-value" name="popupEndDate" data-placeholder="종료일">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

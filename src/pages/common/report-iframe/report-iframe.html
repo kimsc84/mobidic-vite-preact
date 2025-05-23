@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리포트 상세</title>
+  <link rel="stylesheet" href="/src/assets/css/style.css"> <!-- 공통 스타일 -->
+  <link rel="stylesheet" href="report-iframe.css"> <!-- 페이지별 스타일 -->
+  <style>
+    /* Basic styling for the prompt area */
+    #prompt-container {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 15px;
+      background-color: #fdfdfd;
+    }
+    #prompt-container form.form { /* dialogManager adds this class */
+      /* display: flex; flex-wrap: wrap; is already set by dialogManager for mixed-flex */
+      gap: 1rem; /* Gap between prompt fields */
+    }
+    #prompt-container .field { /* dialogManager wraps each field in div.field */
+      /* flex-basis and flex-grow will be set via flexStyle */
+      margin-bottom: 5px; /* Small margin below each field row */
+    }
+    #run-report-button-container {
+      padding: 0 15px 15px 15px;
+    }
+
+    #report-frame {
+        width: 100%;
+        height: 100%;
+        border: 1px dashed #ccc;
+        padding: auto;
+    }
+  </style>
+</head>
+<body>
+    <!-- Prompt area will be populated by report-iframe.js -->
+  <div id="prompt-container" style="display: none;">
+    <h4>리포트 실행 조건</h4>
+    <!-- Form will be rendered here by DialogManager -->
+  </div>
+  <div id="run-report-button-container" style="display: none;">
+    <button id="run-report-button" class="button button--primary">리포트 실행</button>
+  </div>
+  <!-- 리포트 제목 및 iframe은 report-iframe.js에서 동적으로 추가됩니다. -->
+  <iframe id="report-frame" name="report-frame" title="리포트 내용"></iframe>
+  <script type="module" src="report-iframe.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+    <link rel="stylesheet" href="./bottom-drawer.css">
+    <div class="bottom-drawer__backdrop">
+        <div class="bottom-drawer__container">
+            <div class="bottom-drawer__header">
+                <div class="bottom-drawer__tabs">
+                    <button id="favorite" class="bottom-drawer__tab bottom-drawer__tab--active"
+                        data-tab="tab1">즐겨찾기</button>
+                    <button id="recent" class="bottom-drawer__tab" data-tab="tab2">최근실행보고서</button>
+                </div>
+                <button id="favorite-edit" class="bottom-drawer__edit-button button button--ghost">
+                    <svg width="20" height="20" class="button__icon" role="img" aria-label="즐겨찾기 편집"><use href="#icon-bottom-drawer-edit"></use></svg>
+                    <span>즐겨찾기 편집</span>
+                </button>
+            </div>
+            <div class="bottom-drawer__body">
+                <div class="bottom-drawer__slider">
+                    <button id="slider-prev"
+                        class="bottom-drawer__slider-arrow bottom-drawer__slider-arrow--prev round ghost xlarge">
+                        <svg width="20" height="20" role="img" aria-label="이전"><use href="#icon-bottom-drawer-slider-prev"></use></svg>
+                    </button>
+                    <div class="bottom-drawer__slider-track">
+                        <!-- 슬라이더 아이템들은 bottom-drawer.js 에서 동적으로 채워집니다. -->
+                    </div>
+                    <button id="slider-next"
+                        class="bottom-drawer__slider-arrow bottom-drawer__slider-arrow--next round ghost xlarge">
+                        <svg width="20" height="20" role="img" aria-label="다음"><use href="#icon-bottom-drawer-slider-next"></use></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="open-bottom-drawer" class="bottom-drawer__toggle">
+        <!-- 열림버튼 아이콘 -->
+        <svg width="20" height="20" class="bottom-drawer__icon bottom-drawer__icon--open" role="img" aria-label="펼치기"><use href="#icon-bottom-drawer-toggle-open"></use></svg>
+        <!-- 닫힘버튼 아이콘 -->
+        <svg width="20" height="20" class="bottom-drawer__icon bottom-drawer__icon--close" role="img" aria-label="접기"><use href="#icon-bottom-drawer-toggle-close"></use></svg>
+    </button>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인증 필요 (401)</title>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background-color: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; text-align: center; color: #495057; box-sizing: border-box; }
+        .error-container { width: 100%; padding: 30px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+        .error-image { display: block; width: auto; height: auto; max-height: 50vh; object-fit: contain; margin-left: auto; margin-right: auto; margin-bottom: 1.8rem; } /* ✨ 이미지 크기 및 정렬 수정 */
+        .error-title { display:none; font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; color: #212529; }
+        .error-message { font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.7; color: #343a40; }
+        .error-actions a { display: inline-block; padding: 0.8rem 1.8rem; background-color: #00377c; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: background-color 0.2s ease-in-out; font-size: 1rem; }
+        .error-actions a:hover { background-color: #002b62; }
+        .error-code { font-size: 0.9rem; color: #adb5bd; margin-top: 2.5rem; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <img src="/src/assets/img/error/401_illustration.svg" alt="인증 필요" class="error-image">
+        <h1 class="error-title">로그인이 필요합니다 (401)</h1>
+        <p class="error-message">
+            이 페이지에 접근하려면 로그인이 필요합니다. 🔑<br>
+            로그인 후 다시 시도해주시거나, 계정이 없으시다면 관리자에게 문의해주세요.
+        </p>
+        <div class="error-actions">
+            <!-- 로그인 페이지가 있다면 해당 경로로, 없다면 메인으로 -->
+            <a href="/login" onclick="handleGoToLogin(event)">로그인 페이지로</a> 
+            <a href="/common/main" onclick="handleGoToMain(event)" style="margin-left: 10px;">메인으로 돌아가기</a>
+        </div>
+        <p class="error-code">오류 코드: 401 Unauthorized</p>
+    </div>
+    <script>
+        function handleGoToMain(event) {
+            if (window.parent && typeof window.parent.navigateToPage === 'function') {
+                event.preventDefault();
+                window.parent.navigateToPage('common', 'main');
+            }
+        }
+        function handleGoToLogin(event) { // 로그인 페이지 이동 함수 (선택적)
+            if (window.parent && typeof window.parent.navigateToPage === 'function') {
+                event.preventDefault();
+                window.parent.navigateToPage('auth', 'login'); // 'auth/login' 경로는 예시입니다. 실제 경로로 수정하세요.
+            }
+        }
+    </script>
+</body>
+</html>

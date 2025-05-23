@@ -1,0 +1,23 @@
+<svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+    <rect width="240" height="180" fill="#f0f0f0" rx="8"/>
+
+    <g transform="translate(75 60)"> 
+        <rect width="80" height="80" rx="5" fill="#00377c"/>
+        <rect x="10" y="10" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <rect x="10" y="28" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <rect x="10" y="46" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <circle cx="18" cy="68" r="3" fill="#b3d334"/>
+        <circle cx="30" cy="68" r="3" fill="#b3d334" opacity="0.7"/>
+    </g>
+
+    <g transform="translate(155 125) scale(1.4)"> 
+        <rect x="-15" y="-11" width="30" height="22" rx="4" fill="#b3d334" stroke="#FFC107" stroke-width="2"/>
+        <path d="M0 -22 Q-8 -22 -8 -15 V-11 M0 -22 Q8 -22 8 -15 V-11" stroke="#FFC107" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        
+        <circle cx="0" cy="0" r="3.5" fill="#00377c"/>
+        <rect x="-1" y="2.5" width="2" height="4" fill="#00377c"/>
+    </g>
+    
+    <text x="120" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#00377c" text-anchor="middle">401</text>
+    <text x="120" y="165" font-family="Arial, sans-serif" font-size="14" fill="#00377c" text-anchor="middle">인증이 필요합니다</text>
+</svg>

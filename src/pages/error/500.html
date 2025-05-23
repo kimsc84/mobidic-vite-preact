@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서버 내부 오류 (500)</title>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; background-color: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; text-align: center; color: #495057; box-sizing: border-box; }
+        .error-container { width: 100%; padding: 30px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+        .error-image { display: block; width: auto; height: auto; max-height: 50vh; object-fit: contain; margin-left: auto; margin-right: auto; margin-bottom: 1.8rem; } /* ✨ 이미지 크기 및 정렬 수정 */
+        .error-title { display:none; font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; color: #212529; }
+        .error-message { font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.7; color: #343a40; }
+        .error-actions a { display: inline-block; padding: 0.8rem 1.8rem; background-color: #00377c; color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: background-color 0.2s ease-in-out; font-size: 1rem; }
+        .error-actions a:hover { background-color: #002b62; }
+        .error-code { font-size: 0.9rem; color: #adb5bd; margin-top: 2.5rem; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <!-- ✨ 이미지 추가 (경로는 실제 파일 위치에 맞게 수정) ✨ -->
+        <img src="/src/assets/img/error/500_illustration.svg" alt="서버 오류" class="error-image">
+        <h1 class="error-title">서버 내부 오류 (500)</h1>
+        <p class="error-message">
+            서비스 이용에 불편을 드려 죄송합니다.<br>
+            현재 서버에 일시적인 문제가 발생하여 요청을 처리할 수 없습니다.<br>
+            잠시 후 다시 시도해 주시거나, 문제가 지속될 경우 관리자에게 문의해 주시기 바랍니다.
+        </p>
+        <div class="error-actions">
+            <a href="/common/main" onclick="handleGoToMain(event)">메인으로 돌아가기</a>
+        </div>
+        <p class="error-code">오류 코드: 500 Internal Server Error</p>
+    </div>
+    <script>
+        function handleGoToMain(event) {
+            if (window.parent && typeof window.parent.navigateToPage === 'function') {
+                event.preventDefault();
+                window.parent.navigateToPage('common', 'main');
+            }
+        }
+    </script>
+</body>
+</html>

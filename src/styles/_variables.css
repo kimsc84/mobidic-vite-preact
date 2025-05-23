@@ -1,0 +1,356 @@
+/**
+ * vars.css
+ * 디자인 시스템 변수 정의 (색상, 폰트, 효과, 간격)
+ */
+
+/* ==========================================================================
+   1. 색상 (Colors)
+   ========================================================================== */
+:root {
+  /* 기본 색상 */
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* 중립 색상 (Neutral) */
+  --color-gray-0: #ffffff;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
+  --color-gray-1000: #000000; /* --color-black과 동일하지만 명시적으로 정의 */
+
+  /* 주요 색상 (Primary) */
+  /* mobidic primary*/
+  /* 
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
+    --color-primary-950: #162456; 
+    */
+
+  /* 주요 색상 (Primary) */
+  /* 기술 보증 기금 컬러*/
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #e6ebf2;
+  --color-primary-200: #b0c1d6;
+  --color-primary-300: #8aa3c3; /* 포커스 아웃라인 등에 사용 */
+  --color-primary-400: #5479a7; /* Primary 버튼 호버 */
+  --color-primary-500: #335f96; /* Primary 버튼 포커스 */
+  --color-primary-600: #00377c; /* Primary 버튼 기본 */
+  --color-primary-700: #003271;
+  --color-primary-800: #002758;
+  --color-primary-900: #001e44;
+  --color-primary-950: #001734;
+
+  /* 보조 색상 (Secondary) - 현재 Neutral과 동일, 필요시 변경 */
+  --color-secondary-50: #f9fafb;
+  --color-secondary-100: #f3f4f6;
+  --color-secondary-200: #e5e7eb;
+  --color-secondary-300: #d1d5db;
+  --color-secondary-400: #9ca3af;
+  --color-secondary-500: #6b7280;
+  --color-secondary-600: #4b5563;
+  --color-secondary-700: #374151;
+  --color-secondary-800: #1f2937;
+  --color-secondary-900: #111827;
+  --color-secondary-950: #030712;
+
+  /* 보조 색상 (Tertiary) - 기술보증기금 */
+  --color-tertiary-50: #f7fbe9;
+  --color-tertiary-100: #f7fbeb;
+  --color-tertiary-200: #e7f1c0;
+  --color-tertiary-300: #dceba2;
+  --color-tertiary-400: #cce277;
+  --color-tertiary-500: #c2dc5d;
+  --color-tertiary-600: #b3d334;
+  --color-tertiary-700: #a3c02f;
+  --color-tertiary-800: #7f9625;
+  --color-tertiary-900: #62741d;
+  --color-tertiary-950: #4b5916;
+
+  /* 상태 및 기타 색상 (Status & Others) */
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626; /* 오류 강조 등에 사용 */
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+  --color-red-950: #460809;
+
+  --color-yellow-50: #fffbeb;
+  --color-yellow-100: #fef3c7;
+  --color-yellow-200: #fde68a;
+  --color-yellow-300: #fcd34d;
+  --color-yellow-400: #fbbf24;
+  --color-yellow-500: #f59e0b;
+  --color-yellow-600: #d97706;
+  --color-yellow-700: #b45309;
+  --color-yellow-800: #92400e;
+  --color-yellow-900: #78350f;
+  --color-yellow-950: #432004;
+
+  --color-green-50: #ecfdf5;
+  --color-green-100: #d1fae5;
+  --color-green-200: #a7f3d0;
+  --color-green-300: #6ee7b7;
+  --color-green-400: #34d399;
+  --color-green-500: #10b981;
+  --color-green-600: #059669;
+  --color-green-700: #047857;
+  --color-green-800: #065f46;
+  --color-green-900: #064e3b;
+  --color-green-950: #032e15;
+
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-blue-950: #162456;
+
+  --color-cyan-50: #ecfeff;
+  --color-cyan-100: #cffafe;
+  --color-cyan-200: #a5f3fc;
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+  --color-cyan-700: #0e7490;
+  --color-cyan-800: #155e75;
+  --color-cyan-900: #164e63;
+  --color-cyan-950: #053345;
+
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+  --color-orange-950: #441306;
+
+  --color-purple-50: #f5f3ff;
+  --color-purple-100: #ede9fe;
+  --color-purple-200: #ddd6fe;
+  --color-purple-300: #c4b5fd;
+  --color-purple-400: #a78bfa;
+  --color-purple-500: #8b5cf6;
+  --color-purple-600: #7c3aed;
+  --color-purple-700: #6d28d9;
+  --color-purple-800: #5b21b6;
+  --color-purple-900: #4c1d95;
+  --color-purple-950: #3c0366;
+
+  --color-fuschia-50: #fdf4ff;
+  --color-fuschia-100: #fae8ff;
+  --color-fuschia-200: #f5d0fe;
+  --color-fuschia-300: #f0abfc;
+  --color-fuschia-400: #e879f9;
+  --color-fuschia-500: #d946ef;
+  --color-fuschia-600: #c026d3;
+  --color-fuschia-700: #a21caf;
+  --color-fuschia-800: #86198f;
+  --color-fuschia-900: #701a75;
+  --color-fuschia-950: #4b004f;
+
+  --color-pink-50: #fdf2f8;
+  --color-pink-100: #fce7f3;
+  --color-pink-200: #fbcfe8;
+  --color-pink-300: #f9a8d4;
+  --color-pink-400: #f472b6;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+  --color-pink-700: #be185d;
+  --color-pink-800: #9d174d;
+  --color-pink-900: #831843;
+  --color-pink-950: #510424;
+
+  /* 시맨틱 색상 - 텍스트 */
+  --color-text-default: var(--color-gray-900); /* 기본 텍스트 */
+  --color-text-secondary: var(--color-gray-600); /* 보조 텍스트, 플레이스홀더 등 */
+  --color-text-disabled: var(--color-gray-400); /* 비활성화 텍스트 */
+  --color-text-link: var(--color-primary-600); /* 링크 텍스트 */
+  --color-text-link-hover: var(--color-primary-700); /* 링크 호버 */
+  --color-text-error: var(--color-red-600); /* 오류 메시지 */
+  --color-text-success: var(--color-green-600); /* 성공 메시지 */
+  --color-text-on-primary: var(--color-white); /* Primary 배경 위 텍스트 */
+
+  /* 시맨틱 색상 - 테두리 */
+  --color-border-default: var(--color-gray-300); /* 기본 테두리 (input, card 등) */
+  --color-border-subtle: var(--color-gray-200); /* 약한 테두리, 구분선 */
+  --color-border-strong: var(--color-gray-400); /* 강조된 테두리 */
+  --color-border-focus: var(--color-primary-500); /* 포커스 테두리 */
+  --color-border-error: var(--color-red-500); /* 오류 상태 테두리 */
+
+  /* 시맨틱 색상 - 배경 */
+  --color-background-default: var(--color-white); /* 기본 페이지/컴포넌트 배경 */
+  --color-background-subtle: var(--color-gray-50); /* 약간 다른 배경 (섹션, 카드 등) */
+  --color-background-disabled: var(--color-gray-100); /* 비활성화 요소 배경 */
+  --color-background-hover: var(--color-gray-100); /* 일반 호버 배경 */
+  --color-background-selected: var(--color-primary-100); /* 선택된 아이템 배경 */
+}
+
+/* ==========================================================================
+     2. 폰트 (Typography)
+     ========================================================================== */
+:root {
+  /* 폰트 패밀리 */
+  --font-family-base: Noto Sans KR-Regular, Verdana, Arial, sans-serif;
+  --font-family-medium: Noto Sans KR-Medium, Verdana, Arial, sans-serif;
+  --font-family-semibold: Noto Sans KR-SemiBold, Verdana, Arial, sans-serif;
+
+  /* 폰트 크기 (rem 단위) */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 3.75rem; /* 60px */
+
+  /* 폰트 두께 */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* 줄 간격 */
+  --line-height-tight: 120%;
+  --line-height-normal: 150%;
+
+  /* 텍스트 스타일 조합 (font shorthand: weight size/line-height family) */
+  --text-display-large: var(--font-weight-semibold) var(--font-size-6xl) / var(--line-height-tight) var(--font-family-semibold);
+  --text-display-medium: var(--font-weight-semibold) var(--font-size-5xl) / var(--line-height-tight) var(--font-family-semibold);
+  --text-display-small: var(--font-weight-semibold) var(--font-size-4xl) / var(--line-height-tight) var(--font-family-semibold);
+  --text-headline-large: var(--font-weight-semibold) var(--font-size-5xl) / var(--line-height-normal)
+    var(--font-family-semibold);
+  --text-headline-medium: var(--font-weight-semibold) var(--font-size-4xl) / var(--line-height-normal)
+    var(--font-family-semibold);
+  --text-headline-small: var(--font-weight-semibold) var(--font-size-3xl) / var(--line-height-normal)
+    var(--font-family-semibold);
+  --text-title-large: var(--font-weight-semibold) var(--font-size-2xl) / var(--line-height-normal) var(--font-family-semibold);
+  --text-title-medium: var(--font-weight-semibold) var(--font-size-xl) / var(--line-height-normal) var(--font-family-semibold);
+  --text-title-small: var(--font-weight-semibold) var(--font-size-lg) / var(--line-height-normal) var(--font-family-semibold);
+  --text-body-large: var(--font-weight-regular) var(--font-size-base) / var(--line-height-normal) var(--font-family-base);
+  --text-body-medium: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-family-base);
+  --text-body-small: var(--font-weight-regular) var(--font-size-xs) / var(--line-height-normal) var(--font-family-base);
+  --text-label-xlarge: var(--font-weight-medium) var(--font-size-base) / var(--line-height-normal) var(--font-family-medium);
+  --text-label-large: var(--font-weight-medium) var(--font-size-sm) / var(--line-height-normal) var(--font-family-medium);
+  --text-label-medium: var(--font-weight-medium) var(--font-size-xs) / var(--line-height-normal) var(--font-family-medium); /* 기존 600 -> 500 변경 */
+  --text-label-small: var(--font-weight-regular) var(--font-size-xs) / var(--line-height-normal) var(--font-family-base);
+}
+
+/* ==========================================================================
+     3. 효과 (Effects)
+     ========================================================================== */
+:root {
+  /* 그림자 (Shadows) */
+  --shadow-sm: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.06), 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.06), 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.05), 0 0.625rem 0.9375rem rgba(0, 0, 0, 0.1); /* 다이얼로그 기본 그림자 */
+  --shadow-xl: 0 0.625rem 0.625rem rgba(0, 0, 0, 0.04), 0 1.25rem 1.5625rem rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 1.5625rem 3.125rem rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 0.125rem 0.25rem rgba(0, 0, 0, 0.06);
+  --shadow-none: none;
+
+  /* 포커스 아웃라인 (Focus Outline Shadows) */
+  --shadow-outline-primary: 0 0 0 0.125rem var(--color-primary-300); /* Primary 포커스 */
+  --shadow-outline-secondary: 0 0 0 0.125rem var(--color-secondary-300); /* Secondary 포커스 */
+  --shadow-outline-error: 0 0 0 0.125rem var(--color-red-300); /* Error 포커스 */
+  /* 필요시 다른 색상 아웃라인 추가 */
+}
+
+/* ==========================================================================
+     4. 간격 (Spacing) - Tailwind CSS 기반
+     ========================================================================== */
+:root {
+  --space-0: 0px;
+  --space-0-5: 0.125rem; /* 2px */
+  --space-1: 0.25rem; /* 4px */
+  --space-1-5: 0.375rem; /* 6px */
+  --space-2: 0.5rem; /* 8px */
+  --space-2-5: 0.625rem; /* 10px */
+  --space-3: 0.75rem; /* 12px */
+  --space-3-5: 0.875rem; /* 14px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-7: 1.75rem; /* 28px */
+  --space-8: 2rem; /* 32px */
+  --space-9: 2.25rem; /* 36px */
+  --space-10: 2.5rem; /* 40px */
+  --space-11: 2.75rem; /* 44px */
+  --space-12: 3rem; /* 48px */
+  --space-14: 3.5rem; /* 56px */
+  --space-16: 4rem; /* 64px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-28: 7rem; /* 112px */
+  --space-32: 8rem; /* 128px */
+  --space-36: 9rem; /* 144px */
+  --space-40: 10rem; /* 160px */
+  --space-44: 11rem; /* 176px */
+  --space-48: 12rem; /* 192px */
+  --space-52: 13rem; /* 208px */
+  --space-56: 14rem; /* 224px */
+  --space-60: 15rem; /* 240px */
+  --space-64: 16rem; /* 256px */
+  --space-72: 18rem; /* 288px */
+  --space-80: 20rem; /* 320px */
+  --space-96: 24rem; /* 384px */
+}
+
+/* ==========================================================================
+     5. 기타 전역 변수
+     ========================================================================== */
+:root {
+  /* 기본 테두리 두께 */
+  --border-width-base: 1px; /* 1px */
+  /* 기본 테두리 반경 */
+  --border-radius-sm: 0.125rem; /* 2px */
+  --border-radius-base: 0.25rem; /* 4px */
+  --border-radius-lg: 0.5rem; /* 8px */
+  /* 전환 효과 */
+  --transition-duration-short: 0.1s;
+  --transition-duration-base: 0.2s;
+  --transition-duration-long: 0.3s;
+  --transition-timing-function-ease: ease;
+  --transition-timing-function-ease-in-out: ease-in-out;
+  --transition-base: var(--transition-duration-base) var(--transition-timing-function-ease);
+
+  /* Z-인덱스 */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-tooltip: 1070;
+}

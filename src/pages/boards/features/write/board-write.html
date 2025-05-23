@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/css/vars.css" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/pages/boards/features/write/board-write.css" />
+</head>
+<body>
+  <form class="board-write__form">
+    <input type="text" class="board-write__title-input" placeholder="게시글 제목을 입력해주세요" required>
+    <div class="board-write__content-container">
+      <span class="board-write__content-label">내용</span>
+      <div id="editor-container2" class="board-write__editor-container"></div>
+      <div class="board-write__action-buttons">
+        <button type="submit" class="button button--primary board-write__submit">
+          등록
+        </button>
+        <button type="button" class="button button--secondary board-write__cancel-button">
+          취소
+        </button>
+      </div>
+    </div>
+    <!-- <div class="board-write__list-button">
+      <button type="button" class="button button--primary">목록</button>
+    </div> -->
+  </form>
+</body>
+</html>

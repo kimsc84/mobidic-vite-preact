@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>기술보증기금 데이터포털</title> <!-- Vite 환경에 맞게 타이틀 약간 수정 (선택 사항) -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"> <!-- Vite public 디렉토리 기준 경로로 변경 -->
+  <link rel="stylesheet" href="/src/styles/_reset.css" />
+  <link rel="stylesheet" href="/src/styles/_variables.css" />
+  <link rel="stylesheet" href="/src/styles/global.css" />
+  <!-- 모든 인라인 스크립트는 /src/main.js 로 이동됩니다. -->
+</head>
+
+<body>
+  <!-- 로딩 인디케이터 시작 -->
+  <div id="loading-indicator"
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.85); z-index: 99999; display: flex; justify-content: center; align-items: center; font-size: 1.5em; color: var(--color-primary-700); display: none;">
+    <p>🚀 페이지를 불러오는 중입니다... 잠시만 기다려주세요! 🛠️</p>
+  </div>
+  <!-- 로딩 인디케이터 끝 -->
+
+  <!-- 헤더 시작 -->
+  <header id="header-container" class="header" role="banner">
+    <!-- 헤더 내용은 ./src/layout/header.html 에서 동적으로 로드됩니다. -->
+  </header>
+  <!-- Breadcrumb 시작 (header 다음, container 위로 이동) -->
+  <nav id="breadcrumb-container" aria-label="breadcrumb">
+    <!-- Breadcrumb 내용은 ./src/layout/breadcrumb.html 및 ./src/js/breadcrumb.js 에서 동적으로 로드/생성됩니다. -->
+  </nav>
+  <!-- 헤더 종료 -->
+  <section class="container">
+    <!-- 사이드바 시작-->
+    <aside id="sidebar-container" class="sidebar" role="navigation">
+      <!-- 사이드바 내용은 ./src/layout/sidebar.html 에서 동적으로 로드되고,
+             메뉴 항목들은 ./src/js/sidebar.js (initializeSidebar 함수 내)에서
+             ./src/js/menuConfig.js 설정을 기반으로 동적 생성됩니다. -->
+    </aside>
+    <!-- 사이드바 끝-->
+    <section id="content-container" class="main__content" role="main">
+
+    </section>
+    <!-- 메인컨텐츠 끝 -->
+  </section>
+  <!-- bottom drawer 시작 (필요시 role="complementary" 등 ARIA 역할 추가 고려) -->
+  <div id="bottom-drawer-container" class="bottom-drawer-host">
+    <!-- 클래스명 변경! -->
+    <!-- 바텀 드로어 내용은 ./src/layout/bottom-drawer.html 에서 동적으로 로드됩니다. -->
+  </div>
+  <!-- bottom drawer 끝-->
+  <!-- 개발자용 패널 및 검색 모달은 필요시 main.js 또는 특정 페이지에서 동적으로 로드/관리됩니다. -->
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

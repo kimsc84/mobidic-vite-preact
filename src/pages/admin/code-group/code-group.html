@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>코드그룹 관리</title>
+  <link rel="stylesheet" href="/src/pages/admin/code-group/code-group.css" />
+</head>
+
+<body>
+  <main id="admin-container" class="page-layout admin-page"> <!-- admin -> page-layout admin-page, div -> main -->
+    <section class="search-panel"> <!-- admin__search -> search-panel, div -> section -->
+      <div class="search-panel__row"> <!-- admin__search-row -> search-panel__row -->
+        <input type="text" class="search-panel__input" placeholder="검색어를 입력하세요" /> <!-- admin__search-input -> search-panel__input -->
+        <button class="search-panel__button">검색</button> <!-- admin__search-button -> search-panel__button -->
+      </div>
+      <div class="search-panel__filter-bar"> <!-- admin__search-filter -> search-panel__filter-bar -->
+        <span class="search-panel__filter-label">검색 조건</span> <!-- admin__search-filter-label -> search-panel__filter-label -->
+        <div class="checkbox-group search-panel__filter-options"> <!-- control-group--checkbox admin__search-filter-checkboxes -> checkbox-group search-panel__filter-options -->
+          <div class="checkbox-item"> <!-- checkbox -> checkbox-item -->
+            <input type="checkbox" id="all" class="checkbox-item__input" /> <!-- checkbox__input -> checkbox-item__input -->
+            <label for="all" class="checkbox-item__label">전체</label> <!-- checkbox__label-text -> checkbox-item__label -->
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="groupId" class="checkbox-item__input" />
+            <label for="groupId" class="checkbox-item__label">코드그룹ID</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="groupName" class="checkbox-item__input" />
+            <label for="groupName" class="checkbox-item__label">코드그룹명</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="codeId" class="checkbox-item__input" />
+            <label for="codeId" class="checkbox-item__label">코드ID</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="codeName" class="checkbox-item__input" />
+            <label for="codeName" class="checkbox-item__label">코드명</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="displayDisabled" class="checkbox-item__input" />
+            <label for="displayDisabled" class="checkbox-item__label">미사용 포함</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="content-area content-area--split-view"> <!-- code__group -> content-area content-area--split-view -->
+      <section class="list-panel"> <!-- code__table -> list-panel, div -> section -->
+        <div id="list-panel-content-wrapper">
+          <!-- List panel content will be rendered here by DialogManager -->
+        </div>
+      </section>
+
+      <aside class="detail-panel"> <!-- code__group-detail -> detail-panel, div -> aside -->
+        <div id="detail-panel-content-wrapper">
+          <!-- Detail panel content will be rendered here by DialogManager -->
+        </div>
+      </aside>
+    </div> <!-- .content-area -->
+  </main> <!-- .page-layout -->
+</body>
+
+</html>

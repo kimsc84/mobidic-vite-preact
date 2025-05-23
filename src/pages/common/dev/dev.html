@@ -1,0 +1,149 @@
+<!-- d:\99.dev\mobidic-fe-vite\src\pages\common\dev\dev.html -->
+<div class="dev-page-container">
+    <style>
+        /* dev.html 전용 스타일 */
+        .dev-page-container { padding: 20px; font-family: 'Arial', sans-serif; color: #333; }
+        .dev-section { margin-bottom: 30px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f9f9f9; }
+        .dev-section h2 { margin-top: 0; color: #1a73e8; border-bottom: 2px solid #1a73e8; padding-bottom: 8px; font-size: 1.5em; }
+        .dev-section ul { list-style-type: none; padding-left: 0; }
+        .dev-section li { padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .dev-section li:last-child { border-bottom: none; }
+        .dev-section pre { background-color: #2d2d2d; color: #f0f0f0; padding: 10px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9em; margin-top: 5px; }
+        .dev-section .button { margin-right: 8px; margin-top: 8px; display: inline-block !important; /* 버튼 보이도록 !important 추가 */;
+            padding: 0px 8px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 1em;
+        }
+        #last-errors-list li strong { color: #c92a2a; }
+        #dev-environment-info ul li strong { min-width: 150px; display: inline-block; color: #555; }
+
+        /* 개발자 패널 및 명령어 팔레트 스타일 (dev.js에서 제어하는 부분) */
+        /* 개발자 패널 (일반 섹션으로 변경) */
+        .dev-panel-main {
+            /* .dev-section 기본 스타일을 사용하며, 필요한 경우 여기에 추가 스타일 정의 */
+        }
+        #dev-page-list-main { /* 개발자 패널 내부 페이지 목록 */
+            list-style: none;
+            padding: 0;
+            margin-top: 10px; /* 토글 버튼과의 간격 */
+            border: 1px solid #eee;
+            border-radius: 4px;
+            max-height: 250px; 
+            overflow-y: auto;
+        }
+        #dev-page-list-main li a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #007bff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        #dev-page-list-main li:last-child a {
+            border-bottom: none;
+        }
+        #dev-page-list-main li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 명령어 팔레트 (모달 스타일) */
+        .command-palette-main {
+            display: flex; /* 내부 요소 정렬 위해 flex 사용 */
+            flex-direction: column; /* 자식 요소 세로 정렬 */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2); /* 그림자 강화 */
+            position: fixed;
+            top: 15%; /* 화면 상단에서 위치 조정 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 650px; /* 너비 확장 */
+            max-width: 95%; /* 모바일 화면 고려 */
+            z-index: 1050; /* 다른 모달보다 위에 표시되도록 z-index 조정 */
+        }
+        .command-palette-main h2 { /* 명령어 팔레트 제목 스타일 */
+            margin-top: 0;
+            margin-bottom: 15px; /* 입력창과의 간격 */
+            color: #333; 
+            border-bottom: 1px solid #eee; /* 구분선 약하게 */
+            padding-bottom: 10px;
+            font-size: 1.3em;
+        }
+        /* 명령어 팔레트 입력창 스타일은 인라인으로 적용 중 */
+        .command-palette-main ul { /* 명령어 팔레트 목록 */
+            list-style: none;
+            padding: 0;
+            margin: 0; 
+            max-height: 350px; /* 목록 최대 높이 증가 */
+            overflow-y: auto;
+        }
+        .command-palette-main ul li {
+            display: block;
+            padding: 10px 15px; /* 아이템 패딩 증가 */
+            text-decoration: none;
+            color: #333; /* 기본 텍스트 색상 */
+            border-bottom: 1px solid #f0f0f0; /* 매우 옅은 구분선 */
+            cursor: pointer;
+        }
+        .command-palette-main ul li:last-child {
+            border-bottom: none;
+        }
+        .command-palette-main ul li strong { /* 검색어 하이라이트 */
+            color: #007bff;
+            font-weight: bold; /* 필요시 bold 유지 */
+        }
+        .command-palette-main ul li:not(.selected):hover {
+            background-color: #f8f9fa; /* 부드러운 호버 효과 */
+        }
+        .command-palette-main ul li.selected {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+
+    <h1>🛠️ 개발자 페이지 🛠️</h1>
+    <p>이 페이지는 개발 및 디버깅을 위한 다양한 도구와 정보를 제공합니다. (Ctrl+Alt+P: 페이지 목록, Ctrl+Alt+D: 명령어 팔레트)</p>
+
+    <!-- 빠른 페이지 이동 (개발자 패널) -->
+    <div id="dev-panel-container-main" class="dev-section dev-panel-main">
+        <h2>🚀 빠른 페이지 이동</h2>
+        <button id="dev-panel-toggle-btn-main" class="button button--primary">페이지 목록 토글</button>
+        <div id="dev-panel-content-main" style="margin-top: 10px;">
+            <ul id="dev-page-list-main">
+                <!-- dev.js에서 동적으로 채워짐 -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- 명령어 팔레트 -->
+    <div id="command-palette-container-main" class="command-palette-main" style="display:none;">
+        <h2>⌨️ 명령어 팔레트</h2>
+        <input type="text" id="command-palette-input-main" placeholder="페이지 검색..." class="input--primary" style="width: 100%; padding: 12px; margin-bottom: 15px; box-sizing: border-box; font-size: 1.1em;">
+        <ul id="command-palette-list-main">
+            <!-- dev.js에서 동적으로 채워짐 -->
+        </ul>
+    </div>
+
+    <!-- 개발자 액션 -->
+    <div class="dev-section">
+        <h2>🔧 개발자 액션</h2>
+        <div id="developer-actions-container">
+            <!-- dev.js에서 동적으로 버튼 추가 -->
+        </div>
+    </div>
+
+    <!-- 최근 오류 로그 -->
+    <div class="dev-section">
+        <h2>🐞 최근 오류 로그 (최대 5개)</h2>
+        <ul id="last-errors-list">
+            <li>오류 로그가 여기에 표시됩니다.</li>
+        </ul>
+    </div>
+
+    <!-- 개발 환경 정보 -->
+    <div class="dev-section">
+        <h2>ℹ️ 개발 환경 정보</h2>
+        <div id="dev-environment-info">
+            <!-- dev.js에서 동적으로 채워짐 -->
+        </div>
+    </div>
+
+</div>

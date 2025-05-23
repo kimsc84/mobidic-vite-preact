@@ -1,0 +1,275 @@
+
+/* 바텀 드로어 스타일 시작 */
+
+body:has(div.bottom-drawer__backdrop.show),
+body:has(div.modal-backdrop.show) {
+  overflow: hidden;
+}
+
+.bottom-drawer__backdrop.show {
+  width: 100%;
+  height: 100vh;
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s; /* ✨ 중요: 보일 때는 지연 없이 바로! */
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.bottom-drawer__backdrop {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  /* display: flex; */ /* ✨ 자식(.bottom-drawer__container)이 absolute라 불필요 */
+  /* justify-content: center; */ /* ✨ 위와 동일 */
+  /* overflow: hidden; */ /* ✨ 백드롭 자체에 overflow hidden은 보통 불필요 */
+  visibility: hidden; /* ✨ 기본적으로 숨김! */
+  position: fixed;
+  top: 0;
+  left: 0; /* ✨ left: 0 추가 (top, width, height와 짝꿍) */
+  opacity: 0; /* ✨ 기본적으로 투명! */
+  transition: opacity 0.2s ease-in-out, visibility 0s linear 0.2s; /* ✨ opacity만 트랜지션, visibility는 지연 후 변경 */
+  z-index: 1000;
+}
+
+.bottom-drawer__backdrop.show .bottom-drawer__container {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s; /* ✨ .show 되면 바로 보이도록 transition-delay 초기화 */
+  bottom: 0;
+}
+
+.bottom-drawer__container { /* 내용물 판때기 스타일 */
+  display: flex;
+  gap: 1.75rem;
+  flex-direction: column;
+  padding: 1.75rem 3.75rem;
+  box-shadow: 0rem -0.125rem 0.25rem rgba(0, 0, 0, 0.06), 0rem -0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  background-color: var(--color-white);
+
+  /* 화면 하단에 고정시키고, transform으로 애니메이션 */
+  position: fixed;
+  bottom: 0; /* 화면 바닥에 기준 */
+  /* left: 5.25rem; */ /* 사이드바 너비만큼 왼쪽 여백. 필요시 주석 해제 */
+  right: 0; /* 오른쪽 정렬 */
+  width: calc(100% - 5.25rem); /* 오른쪽 정렬 시, 왼쪽 사이드바 영역 제외한 너비 */
+  height: 15rem; /* 드로어 높이 고정 */
+  z-index: 1001; /* 백드롭(1000)보다 위에 오도록 */
+
+  transform: translateY(100%); /* 기본적으로 화면 아래로 숨김 */
+  transition: transform 0.3s ease-in-out; /* transform 속성만 애니메이션 */
+}
+
+.bottom-drawer__tabs {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-drawer__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem 0.5rem 0.25rem;
+  position: relative;
+  background: none;
+  color: var(--color-gray-400);
+  font: var(--text-label-large);
+}
+
+.bottom-drawer__tab::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  content: "";
+  border-radius: 3px;
+}
+
+.bottom-drawer__tab:hover,
+.bottom-drawer__tab.bottom-drawer__tab--active,
+.bottom-drawer__tab:focus,
+.bottom-drawer__tab:active {
+  color: var(--color-gray-950);
+  cursor: pointer;
+}
+
+.bottom-drawer__tab:hover::after,
+.bottom-drawer__tab.bottom-drawer__tab--active::after,
+.bottom-drawer__tab:focus::after,
+.bottom-drawer__tab:active::after {
+  background-color: var(--color-blue-600);
+}
+
+.bottom-drawer__edit-button {
+  position: absolute;
+  top: 1.75rem;
+  right: 4.25rem;
+  color: var(--color-gray-800); /* 원래 아이콘 색상 (흰색) */
+}
+
+.bottom-drawer__edit-button:hover {
+  font-weight: 600;
+  color: var(--color-gray-950);
+}
+
+
+.bottom-drawer__body {
+  height: 100%;
+}
+
+.bottom-drawer__slider {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.bottom-drawer__slider-arrow {
+  margin-top: 3rem;
+  transform: translateY(-50%);
+}
+
+.bottom-drawer__slider-arrow svg {
+  color: #BABABA; /* 원래 화살표 아이콘 색상 */
+}
+
+.bottom-drawer__slider-track {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex: 1;
+}
+
+.bottom-drawer__slider-item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex: 1;
+  flex-direction: column;
+}
+
+.bottom-drawer__slider-thumb {
+  box-shadow: var(--shadow-md);
+  /* width: 12rem; */ /* ✨ 고정 너비 대신 flex item으로 자연스럽게 조절되도록 */
+  /* height: 6rem; */ /* ✨ 고정 높이 대신 aspect-ratio로 비율 유지 */
+  aspect-ratio: 16 / 9; /* ✨ 16:9 비율 유지 (필요시 조정) */
+  object-fit: cover;    /* ✨ 이미지가 비율 유지하며 꽉 차도록 (contain도 가능) */
+  border-radius: 0.75rem;
+  background-color: var(--color-gray-200); /* ✨ 이미지 로딩 전/실패 시 배경색 */
+  display: block; /* 이미지가 inline 속성 가질 수 있으므로 block으로 */
+  min-width: 8rem; /* ✨ 최소 너비 설정 (예: 8rem = 128px) */
+  max-width: 12rem; /* ✨ 최대 너비도 설정해주는 게 좋음 (예: 12rem = 192px) */
+  width: 100%; /* ✨ 부모(.bottom-drawer__slider-item) 너비에 맞추되, min/max로 제한 */
+}
+
+.bottom-drawer__slider-thumb--blank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 12rem; */ /* ✨ 위와 동일하게 수정 */
+  /* height: 6rem; */ /* ✨ 위와 동일하게 수정 */
+  aspect-ratio: 16 / 9; /* ✨ 비율 유지 */
+  background-color: var(--color-gray-300);
+  border-radius: 0.75rem;
+  min-width: 8rem; /* ✨ 최소 너비 설정 */
+  max-width: 12rem; /* ✨ 최대 너비 설정 */
+  width: 100%; /* ✨ 부모 너비에 맞춤 */
+}
+
+.bottom-drawer__slider-thumb--blank svg {
+  color: #D3DBE5; /* 원래 플레이스홀더 아이콘 색상 */
+  width: 30%; /* ✨ 플레이스홀더 아이콘 크기 조정 (부모 너비의 30%) */
+  height: auto;
+}
+
+.bottom-drawer__slider-name {
+  color: var(--color-gray-950);
+  font: var(--text-label-large);
+  /* 1줄 클램프 (한 줄 넘어가면 말줄임표) */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%; /* 부모(.bottom-drawer__slider-item) 너비에 맞추기 위함 */
+  text-align: center; /* 텍스트가 짧을 경우 중앙 정렬 (선택 사항) */
+}
+
+.bottom-drawer__backdrop.show + .bottom-drawer__toggle {
+  bottom: 15rem;
+}
+
+.bottom-drawer__backdrop.show + .bottom-drawer__toggle > .bottom-drawer__icon--open {
+  display: none;
+}
+
+.bottom-drawer__backdrop.show + .bottom-drawer__toggle > .bottom-drawer__icon--close {
+  display: block;
+}
+
+.bottom-drawer__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0 -0.5rem 0.25rem -0.25rem rgba(0, 0, 0, 0.06), 0 -0.25rem 0.375rem -0.25rem rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08); /* ✨ 좀 더 부드럽고 세련된 그림자로 변경 */
+  position: fixed;
+  bottom: 0;
+  /* 사이드바 1depth 메뉴 너비 만큼 오른쪽으로 이동 */
+  left: calc(50% + (5.25rem / 2));
+  z-index: 1000;
+  width: 8rem;
+  height: 1.5rem;
+  background-color: var(--color-gray-50); /* ✨ 배경색을 아주 살짝만 주어 흰 배경과 구분되면서도 밝게 */
+  border: 1px solid var(--color-gray-200);   /* ✨ 테두리 색상도 배경과 조화롭게 살짝 연하게 */
+  border-bottom: none;                      /* ✨ 바닥 테두리는 제거하여 붙어있는 느낌 연출 */
+  transform: translateX(-50%); /* 기본 가로 중앙 정렬 */
+  border-radius: 0.5rem 0.5rem 0 0;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer; /* ✨ 기본 상태에서도 커서 포인터로 변경 */
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.04), 0 -4px 8px rgba(0, 0, 0, 0.06); /* ✨ 섬세하고 입체적인 그림자 */
+}
+
+.bottom-drawer__toggle > svg {
+  width: 1.25rem;
+  /* color: #8E97A6; */ /* 원래 토글 아이콘 색상 */
+  color: var(--color-gray-700); /* ✨ 버튼 배경색과 어울리도록 아이콘 색상 조정 (예: 진한 회색) */
+  transition: color 0.3s ease-in-out; /* ✨ 아이콘 색상 변경도 부드럽게 */
+}
+
+.bottom-drawer__toggle > .bottom-drawer__icon--close {
+  display: none;
+}
+.bottom-drawer__toggle:hover {
+  background-color: var(--color-white); /* ✨ 호버 시 배경색을 깨끗한 흰색으로 */
+  border-color: var(--color-gray-300); /* ✨ 호버 시 테두리 색상도 살짝 선명하게 */
+  /* transform: translateX(-50%) translateY(-5px); ✨ 호버 시 좀 더 위로 떠오르는 느낌 강조 */
+  box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.05), 0 -6px 16px rgba(0, 0, 0, 0.1); /* ✨ 호버 시 그림자 더 풍부하고 넓게 */
+}
+
+.bottom-drawer__toggle:hover > svg {
+  color: var(--color-blue-700); /* ✨ 호버 시 아이콘 색상 더 진하게 */
+}
+
+.bottom-drawer__toggle:active { /* ✨ 버튼 눌렀을 때 (활성 상태) 스타일 */
+  background-color: var(--color-gray-100); /* ✨ 눌렸을 때 배경색 살짝 어둡게 */
+  border-color: var(--color-gray-300);
+  box-shadow: 0 -1px 2px rgba(0,0,0,0.03) inset, 0 -1px 3px rgba(0,0,0,0.04); /* ✨ 안으로 살짝 들어간 듯한 그림자 + 아주 옅은 외부 그림자 */
+}
+.bottom-drawer__toggle:active > svg {
+  color: var(--color-blue-800); /* ✨ 활성 상태 아이콘 색상 (호버보다 살짝 더 진하게) */
+}
+
+/* 백드롭에 .show 클래스가 붙으면, 내용물 판때기를 화면 안으로 이동 */
+.bottom-drawer__backdrop.show .bottom-drawer__container {
+  transform: translateY(0);
+}
+
+/* 바텀 드로어 토글 버튼 내부 아이콘 상태 변경 */
+.bottom-drawer__toggle .bottom-drawer__icon--close { display: none; }
+.bottom-drawer__toggle .bottom-drawer__icon--open { display: block; }
+/* 아래 두 줄은 .bottom-drawer__backdrop.show + .bottom-drawer__toggle 규칙으로 대체되었으므로 삭제 */
+/* #bottom-drawer-container.active .bottom-drawer__toggle .bottom-drawer__icon--close { display: block; } */
+/* #bottom-drawer-container.active .bottom-drawer__toggle .bottom-drawer__icon--open { display: none; } */
+/* 바텀 드로어 스타일 끝 */

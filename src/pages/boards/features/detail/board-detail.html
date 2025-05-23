@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/css/vars.css" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/pages/boards/features/detail/board-detail.css" />
+  </head>
+  <body>
+    <div class="board-detail__col scroll--common">
+      <div class="board-detail__content">
+        <div class="board-detail__header">
+          <div class="board-detail__title"></div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div class="board-detail__info">
+              <span class="board-detail__info-item board-detail__author"></span>
+              <span class="board-detail__info-item board-detail__date"></span>
+              <span class="board-detail__info-item board-detail__views"></span>
+            </div>
+            <div class="board-detail__dropdown">
+              <button type="button" class="board-detail__dropdown-button button button--ghost button--icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 9.99583H10.0083V10.0042H10V9.99583ZM10 4.1625H10.0083V4.17083H10V4.1625ZM10 15.8292H10.0083V15.8375H10V15.8292Z" stroke="white" stroke-width="3.75" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="board-detail__dropdown-menu">
+                <button class="board-detail__dropdown-item">수정하기</button>
+                <button class="board-detail__dropdown-item">삭제하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="editor-container2" class="board-detail__body scroll--common"></div>
+      </div>
+      <div class="board-detail__attachments"></div>
+      <div class="board-detail__comments"><div class="board-detail__comments-title">댓글</div>
+        <ul class="board-detail__comments-list scroll--common">
+        </ul>
+      </div>
+      <div class="board-detail__comment-form-container">
+        <span class="board-detail__comment-form-author">김기보</span>
+        <form class="board-detail__comment-form">
+          <textarea class="board-detail__comment-textarea scroll--common" placeholder="댓글을 입력하세요"></textarea>
+          <button type="submit" class="board-detail__comment-submit">등록</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

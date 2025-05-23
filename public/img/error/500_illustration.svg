@@ -1,0 +1,23 @@
+<svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+    <rect width="240" height="180" fill="#f0f0f0" rx="8"/>
+
+    <g transform="translate(75 60)"> 
+        <rect width="80" height="80" rx="5" fill="#00377c"/>
+        <rect x="10" y="10" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <rect x="10" y="28" width="60" height="10" rx="2" fill="#5D6D7E"/>
+        <rect x="10" y="46" width="60" height="10" rx="2" fill="#E74C3C"/> 
+        <circle cx="18" cy="68" r="3" fill="#b3d334" opacity="0.7"/> 
+        <circle cx="30" cy="68" r="3" fill="#E74C3C"> 
+             <animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+    
+    <g transform="translate(155 115) scale(1.87)"> 
+        <path d="M0 -14 L13 9 L-13 9 Z" fill="#b3d334" stroke="#FF9800" stroke-width="1.5"/> 
+        <rect x="-2.25" y="-5.4" width="4.5" height="9" fill="#00377c" rx="1.35"/> 
+        <circle cx="0" cy="6.75" r="2.25" fill="#00377c"/> 
+    </g>
+
+    <text x="120" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#00377c" text-anchor="middle">500</text>
+    <text x="120" y="165" font-family="Arial, sans-serif" font-size="14" fill="#00377c" text-anchor="middle">내부 서버 오류</text>
+</svg>

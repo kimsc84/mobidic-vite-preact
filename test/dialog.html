@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기술보증기금 공통모달</title>
+    <!-- CSS -->
+
+  <link rel="stylesheet" href="/src/styles/_reset.css" />
+  <link rel="stylesheet" href="/src/styles/_variables.css" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+    <!-- JS -->
+    <style>
+      .layout {
+        display: flex;
+        min-height: 100vh; /* 최소 높이를 화면 전체로 */
+      }
+
+      /* == Block: nav (데모용 네비게이션) == */
+      .nav {
+        width: 200px;
+        background-color: var(--color-primary-50);
+        padding: var(--space-4);
+        flex-shrink: 0; /* 너비 고정 */
+      }
+
+      .nav__link {
+        display: block;
+        padding: var(--space-2);
+        margin: var(--space-2) 0;
+        border-radius: var(--border-radius-base);
+        text-decoration: none;
+        font: var(--text-label-medium);
+        color: var(--color-tertiary-600);
+        background: var(--color-primary-600);
+        transition: background-color var(--transition-base), color var(--transition-base);
+      }
+
+      .nav__link:hover {
+        background: var(--color-tertiary-500);
+        color: var(--color-primary-500); /* 브랜드 색상은 유지 */
+      }
+
+      /* == Block: main-content (데모용 메인 컨텐츠 영역) == */
+      .main-content {
+        flex: 1; /* 남은 공간 차지 */
+        padding: var(--space-4);
+      }
+
+      .main-content__title {
+        font: var(--text-headline-medium);
+        margin-bottom: var(--space-4);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="layout">      
+      <nav class="nav" id="dialogNav">
+        <!-- 동적으로 생성될 메뉴 항목들 -->
+      </nav>
+
+      <main class="main-content">
+        <h1 class="main-content__title">기술보증기금 공통모달</h1>
+        <p>좌측 메뉴를 클릭하여 모달을 테스트하세요.</p>
+      </main>
+    </div>    
+    <script type="module">      import DialogManager from "/src/components/dialog/dialogManager.js";
+      // '/src/components/dialog/dialogTemplates.js' 모듈이 'templates'라는 이름의 export를 제공하지 않음.
+      // 해당 모듈이 개별 템플릿(예: commonField, bizMetaDetail 등)을 named export 한다고 가정하고,
+      // 모든 named export를 하나의 객체로 가져와서 dialogTemplates로 사용.
+      import * as allDialogTemplates from "/src/components/dialog/dialogTemplates.js";
+      const dialogTemplates = allDialogTemplates;
+      /**
+       * 대화상자 메뉴를 동적으로 생성하는 함수
+       */
+      function initializeDialogMenu() {
+        const nav = document.getElementById('dialogNav');
+        // 수정: dialogTemplates.default를 사용하여 실제 템플릿 객체에 접근
+        // 이유: import * as ... 구문으로 가져온 경우, default export는 'default' 속성으로 접근해야 함.
+        Object.entries(dialogTemplates.default).forEach(([key, template]) => {
+          const link = document.createElement('a');
+          link.href = '#';
+          link.className = 'nav__link';
+          link.dataset.dialog = key;
+          link.textContent = key;
+          link.title = key; // 툴팁으로 설명 표시
+          nav.appendChild(link);
+        });
+      }
+
+      // * 샘플 데이터: 각 모달 타입별 테스트용 데이터 구조 정의
+      const sampleData = {
+        codeGroupBase: {
+          id: "GRP-101",
+          name: "사용자 상태",
+          description: "시스템 사용자의 상태를 정의하는 코드 그룹입니다.",
+          parent: "",
+          usage: "1",
+        },
+        codeBase: {
+          group_id: "GRP-101",
+          group_name: "사용자 상태",
+          id: "USR-ACTIVE",
+          name: "활성 사용자",
+          description: "현재 시스템을 정상적으로 사용 중인 사용자 상태",
+          parent: "",
+          usage: "1",
+        },
+        commonField: {
+          // 수정: dialogTemplates.default.commonField로 정확히 접근하고,
+          // commonField 객체에 defaultData가 없을 경우를 대비해 || {} 추가
+          ...(dialogTemplates.default.commonField?.defaultData || {}),
+          select: "opt2",
+          period_date: {
+            start: "2024-05-01",
+            end: "2024-05-15",
+          },
+          options_check: ["weekly", "monthly"],
+          measurement: {
+            value: 15.5,
+            unit: "cm",
+          },
+          ip: {
+            part1: 192,
+            part2: 168,
+            part3: 0,
+            part4: 1,
+          },
+          history: [
+            {
+              id: "hist001",
+              date: "2024-07-15 10:30:15",
+              user: "김철수",
+              content: "초기 버전 생성",
+            },
+            {
+              id: "hist002",
+              date: "2024-07-16 14:05:00",
+              user: "박영희",
+              content: "설명 필드 업데이트",
+            },
+            {
+              id: "hist003",
+              date: "2024-07-17 09:11:23",
+              user: "이민준",
+              content: "사용 여부 '사용'으로 변경",
+            },
+            {
+              id: "hist004",
+              date: "2024-07-18 11:55:40",
+              user: "최지우",
+              content: "오타 수정 및 내용 보강",
+            },
+          ],
+          attachments: [
+            {
+              id: "file001",
+              name: "요구사항정의서_v1.docx",
+              size: "104857600",
+              url: "/download/file001",
+              canDelete: true,
+            },
+            {
+              id: "file002",
+              name: "디자인시안_최종.fig",
+              size: "10240",
+              url: "/download/file002",
+              canDelete: false,
+            },
+            {
+              id: "file003",
+              name: "참고이미지.zip",
+              size: "34567",
+              url: null,
+              canDelete: true,
+            },
+          ],
+          readonly_files: [
+            {
+              id: "read001",
+              name: "계약서_스캔본.pdf",
+              size: "4096000",
+              url: "/download/read001",
+            },
+            {
+              id: "read002",
+              name: "프로젝트_결과보고서.pptx",
+              size: "2048000",
+              url: "/download/read002",
+            },
+          ],
+          terms_agree: true,
+          thumbnail: null,
+        },
+        bizMetaDetail: {
+          // 수정: dialogTemplates.default.bizMetaDetail로 정확히 접근하고,
+          // bizMetaDetail 객체에 defaultData가 없을 경우를 대비해 || {} 추가
+          ...(dialogTemplates.default.bizMetaDetail?.defaultData || {}),
+          title: "혁신기업 발굴 및 창업수출 지원 캠페인",
+          date: "2024-07-29",
+          category: "정책 보고서",
+          authorization: "내부 공개",
+          path: "/reports/campaign/2024/innovation_support.pdf",
+          owner: "기획조정부",
+          description: `본 보고서는 혁신적인 기술을 보유한 국내 중소기업을 발굴하고,
+이들 기업의 성공적인 창업 및 해외 수출을 지원하기 위한
+다각적인 캠페인 전략을 제시합니다.
+주요 내용으로는 시장 분석, 타겟 기업 선정 기준, 지원 프로그램 설계, 그리고 기대 효과 등이 포함되어 있습니다.`,
+        },
+      };
+
+      const dialogManager = new DialogManager();
+
+      // * 테이블 내 버튼 클릭/파일 변경 등 액션 처리 콜백 설정
+      dialogManager.setTableActionCallback(async (action, details) => {
+        const {
+          rowId,
+          tableId,
+          dialogType,
+          event,
+          files,
+        } = details;
+        console.log(`테이블 액션 발생! 액션: ${action}, 행 ID: ${rowId}, 테이블 ID: ${tableId}`);
+
+        switch (action) {
+          case "viewHistoryDetail":
+            alert(`히스토리 상세 보기: ${rowId}`);
+            break;
+
+          case "remove-row":
+            if (confirm(`정말로 행(ID: ${rowId})을 삭제하시겠습니까?`)) {
+              try {
+                dialogManager.removeTableRow(tableId, rowId);
+              } catch (error) {
+                console.error("행 삭제 처리 중 오류:", error);
+                alert("행 삭제 중 오류가 발생했습니다.");
+              }
+            }
+            break;
+
+          case "editItem":
+            alert(`아이템 수정: ${rowId}`);
+            break;
+
+          case "file-input-change":
+            console.log(`파일 입력 변경 감지! 테이블 ID: ${tableId}, 파일 개수: ${files?.length}`);
+            if (files && files.length > 0) {
+              Array.from(files).forEach((file) => {
+                const tempFileId = `new_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+                const newRowData = { id: tempFileId, name: file.name, size: file.size, url: null, canDelete: true };
+                dialogManager.addTableRow(tableId, newRowData);
+              });
+
+              if (event && event.target) {
+                event.target.value = null;
+              }
+            }
+            break;
+
+          case "remove-all-rows":
+            if (confirm(`테이블(${tableId})의 모든 행을 삭제하시겠습니까?`)) {
+              try {
+                dialogManager.removeAllTableRows(tableId);
+              } catch (error) {
+                console.error("테이블 전체 삭제 처리 중 오류:", error);
+                alert("테이블 전체 삭제 중 오류가 발생했습니다.");
+              }
+            }
+            break;
+
+          case "add-file":
+            console.log(`[${dialogType}-${tableId}] 파일 추가 버튼 클릭됨. 파일 선택 대기 중...`);
+            break;
+
+          case "add-row-common":
+            const tableElementToAdd = document.getElementById(tableId);
+
+            if (tableElementToAdd) {
+              const tempRowId = `new_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+              const newRowData = { id: tempRowId, canDelete: true };
+              dialogManager.addTableRow(tableId, newRowData);
+            } else {
+              console.error("행을 추가할 테이블 요소를 찾을 수 없습니다.");
+            }
+            break;
+
+          default:
+            console.warn(`처리되지 않은 테이블 액션: ${action}`);
+            alert(`알 수 없는 액션입니다: ${action}`);
+        }
+      });
+
+      /**
+       * DialogManager 초기화 및 설정
+       */
+      function initializeDialogManager() {
+        dialogManager.setSubmitCallback(async (dialogType, formData) => {
+          console.log(`[${dialogType}] 폼 제출 시작`, formData);
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          
+          const isSuccess = Math.random() > 0.2;
+          if (isSuccess) {
+            console.log(`[${dialogType}] 데이터 처리 성공!`);
+            alert(`${dialogType} 처리가 완료되었습니다.`);
+          } else {
+            console.error(`[${dialogType}] 데이터 처리 실패.`);
+            throw new Error("서버 처리 중 오류가 발생했습니다.");
+          }
+        });
+
+        console.log("DialogManager 초기화 완료!");
+      }
+
+      /**
+       * 대화상자 타입에 따른 데이터 및 설정 반환
+       */
+      function getDataForDialog(type) {
+        // 수정: dialogTemplates.default를 사용하여 실제 템플릿 객체에 접근
+        const template = dialogTemplates.default[type];
+        if (!template) {
+          console.warn(`알 수 없는 다이얼로그 타입: ${type}`);
+          return null;
+        }
+
+        // 기본 템플릿 설정과 샘플 데이터 병합
+        const baseData = {
+          dialogWidth: template.width,
+          // 수정: template 객체에 defaultData가 없을 경우를 대비해 || {} 사용 (이미 잘 되어있었지만 명시)
+          ...(template.defaultData || {}), 
+        };
+
+        // 샘플 데이터와 병합
+        switch (type) {
+          case "codeGroupCreate":
+            return baseData;
+          case "codeGroupDetail":
+          case "codeGroupUpdate":
+            return { ...baseData, ...sampleData.codeGroupBase };
+          case "codeCreate":
+            return { ...baseData, ...sampleData.codeGroupBase };
+          case "codeDetail":
+          case "codeUpdate":
+            return { ...baseData, ...sampleData.codeBase };
+          case "commonField":
+            return { ...baseData, ...sampleData.commonField };
+          case "bizMetaDetail":
+            return { ...baseData, ...sampleData.bizMetaDetail };
+          default:
+            return baseData;
+        }
+      }
+
+      /**
+       * 네비게이션 링크 클릭 이벤트 설정
+       */
+      function setupNavigationLinks() {
+        document.querySelectorAll(".nav__link[data-dialog]").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            const type = trigger.getAttribute("data-dialog");
+            const dataToLoad = getDataForDialog(type);
+
+            if (dataToLoad !== null) {
+              dialogManager.open(type, dataToLoad);
+            }
+          });
+        });
+        console.log("네비게이션 링크 설정 완료!");
+      }
+
+      // DOM 로드 완료 후 초기화
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeDialogManager();
+        initializeDialogMenu();
+        setupNavigationLinks();
+      });
+    </script>
+  </body>
+</html>

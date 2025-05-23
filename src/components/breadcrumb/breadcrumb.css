@@ -1,0 +1,49 @@
+/* Breadcrumb 컴포넌트 스타일 */
+#breadcrumb-container {
+  display: block; /* 항상 표시 */
+  position: sticky; /* 헤더 하단에 고정 */
+  top: 5rem; /* 헤더 높이(var(--header-height, 5rem) 등 변수 사용 권장) */
+  left: 5.25rem; /* 1뎁스 사이드바 너비(var(--sidebar-width-1st, 5.25rem) 등 변수 사용 권장) */
+  width: calc(100% - 5.25rem); /* 전체 너비 - 1뎁스 사이드바 너비 */
+  z-index: 945; /* 사이드바 드로워(z-index: 950 이상)보다 낮은 z-index */
+  padding: 0.5rem 0.5rem; /* 상하 패딩, 좌우 패딩은 내부 .breadcrumb에서 관리 */
+  border-bottom: 1px solid var(--color-border-subtle); /* 하단 구분선 추가 */
+  background-color: var(--color-white); /* 배경색: 흰색 */
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* 그림자 효과 */
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.breadcrumb__item {
+  font: var(--text-label-large); /* 폰트: 라벨 - 큰 사이즈 */
+  line-height: 1.2; /* 줄 간격 */
+  padding-top: 0.2rem;    /* 아이템 상단 패딩 (수직 정렬 및 높이 조절) */
+  padding-bottom: 0.2rem; /* 아이템 하단 패딩 (수직 정렬 및 높이 조절) */
+}
+
+.breadcrumb__item a {
+  font-size: inherit; /* 부모 요소의 폰트 크기 상속 */
+  color: var(--text-secondary, #0d6efd); /* 링크 텍스트 색상 (보조) */
+  text-decoration: none;
+}
+
+.breadcrumb__item a:hover,
+.breadcrumb__item a:focus {
+  color: var(--text-primary, #0a58ca); /* 링크 텍스트 색상 (기본, 호버/포커스 시) */
+  text-decoration: underline;
+}
+
+.breadcrumb__item.breadcrumb__item--active {
+  color: var(--text-primary, #212529); /* 현재 활성 페이지 텍스트 색상 (기본) */
+  font-weight: var(--font-weight-semibold, 600); /* 폰트 두께: 세미볼드 (강조) */
+}
+
+.breadcrumb__separator {
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  color: var(--text-disabled, #6c757d); /* 구분자 텍스트 색상 (비활성) */
+}

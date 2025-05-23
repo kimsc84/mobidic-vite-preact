@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>리포트 프롬프트 테스트</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/styles/_reset.css" />
+    <link rel="stylesheet" href="/src/styles/_variables.css" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <style>
+      body {
+        padding: var(--space-5);
+        font-family: var(--font-family-base);
+        background-color: var(--color-neutral-50);
+        color: var(--color-text-primary);
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: var(--space-5);
+        background-color: var(--color-background-default);
+        border-radius: var(--border-radius-large);
+        box-shadow: var(--shadow-medium);
+      }
+      h1 {
+        font: var(--text-headline-medium);
+        margin-bottom: var(--space-5);
+        color: var(--color-primary-500);
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+        margin-bottom: var(--space-5);
+      }
+      .controls label {
+        font: var(--text-label-medium);
+        color: var(--color-text-secondary);
+      }
+      #promptFormContainer {
+        margin-top: var(--space-4);
+        padding: var(--space-4);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-medium);
+        background-color: var(--color-neutral-0);
+        min-height: 100px; /* 프롬프트 로딩 전에도 영역 유지 */
+      }
+      #promptFormContainer:empty::before { /* 컨테이너가 비었을 때 안내 메시지 */
+        content: "위에서 리포트 ID를 선택하고 \"프롬프트 생성\" 버튼을 클릭하세요.";
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        color: var(--color-text-placeholder);
+        font: var(--text-body-medium);
+      }
+      .button-group {
+        margin-top: var(--space-4);
+      }
+      #promptDataOutput {
+        margin-top: var(--space-4);
+        background-color: var(--color-neutral-100);
+        padding: var(--space-3);
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--border-radius-small);
+        white-space: pre-wrap;
+        word-break: break-all;
+        font-family: var(--font-family-mono);
+        font-size: var(--text-body-small-size);
+        max-height: 400px;
+        overflow-y: auto;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>리포트 프롬프트 테스트</h1>
+
+        <div class="controls">
+            <label for="reportIdSelect">리포트 ID 선택:</label>
+            <select id="reportIdSelect" class="select" style="min-width: 280px;"></select>
+            <button id="renderPromptButton" class="button button--primary">프롬프트 생성</button>
+        </div>
+
+        <div id="promptFormContainer">
+            <!-- 프롬프트 폼이 여기에 렌더링됩니다. -->
+        </div>
+
+        <div class="button-group">
+            <button id="getPromptDataButton" class="button button--secondary" style="display: none;">프롬프트 데이터 확인</button>
+        </div>
+        <pre id="promptDataOutput" style="display: none;"></pre>
+    </div>
+
+    <script type="module">
+        import DialogManager from "/src/components/dialog/dialogManager.js";
+        import { promptTemplate, transformPromptFields } from '/src/pages/common/report-iframe/report-iframe.js';
+
+        const dialogManager = new DialogManager();
+
+        let reportIdSelect, renderPromptButton, promptFormContainer, getPromptDataButton, promptDataOutput;
+        let currentPromptFormControls = null;
+
+        function populateReportIdSelect() {
+            if (!reportIdSelect || !promptTemplate) return;
+            reportIdSelect.innerHTML = '<option value="">-- 리포트 ID 선택 --</option>';
+            const reportIds = Object.keys(promptTemplate).sort();
+            if (reportIds.length === 0) {
+                reportIdSelect.innerHTML = '<option value="" disabled>사용 가능한 리포트 ID 없음</option>';
+                return;
+            }
+            reportIds.forEach(id => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = id;
+                reportIdSelect.appendChild(option);
+            });
+        }
+
+        async function handleRenderPrompt() {
+            if (!reportIdSelect || !promptFormContainer || !dialogManager) return;
+            const selectedReportId = reportIdSelect.value;
+            promptFormContainer.innerHTML = ''; // 이전 내용 초기화
+            getPromptDataButton.style.display = 'none';
+            promptDataOutput.style.display = 'none';
+            currentPromptFormControls = null;
+
+            if (!selectedReportId) {
+                promptFormContainer.innerHTML = '<p style="color: var(--color-text-placeholder);">리포트 ID를 선택해주세요.</p>';
+                return;
+            }
+            const originalPromptFields = promptTemplate[selectedReportId];
+            if (!originalPromptFields || !Array.isArray(originalPromptFields)) {
+                promptFormContainer.innerHTML = `<p style="color: var(--color-warning-500);">"${selectedReportId}"에 대한 프롬프트 필드 정의를 찾을 수 없거나 유효하지 않습니다.</p>`;
+                return;
+            }
+            const transformedPromptFields = transformPromptFields(originalPromptFields);
+            currentPromptFormControls = dialogManager.renderFormInContainer(promptFormContainer, { fields: transformedPromptFields, dialogLayout: "mixed-flex" }, {});
+            if (currentPromptFormControls) getPromptDataButton.style.display = 'inline-block';
+            else promptFormContainer.innerHTML = `<p style="color: var(--color-error-500);">"${selectedReportId}" 프롬프트 폼 생성에 실패했습니다.</p>`;
+        }
+
+        function handleGetPromptData() {
+            if (!currentPromptFormControls) { alert('먼저 프롬프트를 생성해주세요.'); return; }
+            if (currentPromptFormControls.validate()) {
+                const promptData = currentPromptFormControls.getFormData();
+                promptDataOutput.textContent = JSON.stringify(promptData, null, 2);
+                promptDataOutput.style.display = 'block';
+            } else {
+                alert('프롬프트 입력값을 확인해주세요.');
+                promptDataOutput.style.display = 'none';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            reportIdSelect = document.getElementById('reportIdSelect');
+            renderPromptButton = document.getElementById('renderPromptButton');
+            promptFormContainer = document.getElementById('promptFormContainer');
+            getPromptDataButton = document.getElementById('getPromptDataButton');
+            promptDataOutput = document.getElementById('promptDataOutput');
+
+            if (!reportIdSelect || !renderPromptButton || !promptFormContainer || !getPromptDataButton || !promptDataOutput) {
+                document.body.innerHTML = "<p style='color:red; font-weight:bold;'>필수 UI 요소를 찾을 수 없습니다. HTML 구조를 확인하세요.</p>";
+                return;
+            }
+            populateReportIdSelect();
+            renderPromptButton.addEventListener('click', handleRenderPrompt);
+            getPromptDataButton.addEventListener('click', handleGetPromptData);
+        });
+    </script>
+</body>
+</html>

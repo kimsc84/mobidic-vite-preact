@@ -1,0 +1,91 @@
+<div class="header__logo">
+  <!-- SVG 로고를 외부 파일로 변경 -->
+  <a href="/index.html" id="header-logo-link" title="홈으로 이동" style="display: inline-block; text-decoration: none; cursor: pointer;">
+    <img src="/logo.svg" alt="logo" style="width: 300px; height: 40px; display: block;">
+  </a>
+  </div>
+  <div class="header__search-wrap">
+  <div class="header__search-bar">
+    <input
+      type="text"
+      class="header__search-input"
+      placeholder="검색어를 입력하세요"
+      id="header-search-input"
+      autocomplete="off"
+    />
+    <button class="button button--info button--round" id="header-search-button" aria-label="검색 모달 열기">
+      <svg width="16" height="16" class="icon">
+        <use href="#icon-search-new"></use>
+      </svg>
+    </button>
+  </div>
+  </div>
+  <div class="header__user">
+  <div class="header__user-wrap">
+    <svg width="18" height="18" class="button__icon" role="img" aria-label="사용자" style="fill: #030712;">
+      <use href="#icon-user-new"></use> 
+    </svg>
+      <span>김기보</span>
+    </div>
+    <button class="button button--ghost button--medium">사이트맵</button>
+  </div>
+  <div class="modal" id="search-modal">
+      <div class="modal__dialog">
+        <button id="modal-close" class="modal__close-button button button--ghost">
+          <svg width="16" height="16" role="img" aria-label="닫기">
+            <use href="#icon-modal-close-specific"></use>
+          </svg>
+        </button>
+        <div class="modal__header">리포트 검색</div>
+        <div class="modal__body">
+          <div class="header__search-bar">
+            <input type="text" class="header__search-input" placeholder="검색어를 입력하세요" id="modal-search-input"
+              autocomplete="off" />
+            <button class="button button--info button--round" id="modal-search-button" aria-label="검색 실행">
+              <svg width="16" height="16" class="icon" role="img" aria-label="검색">
+                <use href="#icon-searchbar-magnifier"></use>
+              </svg>
+            </button>
+          </div>
+          <!-- 최근 검색어 목록 시작 -->
+          <ul class="search__recents scroll--common" id="recent-searches-list"></ul>
+          <!-- 최근 검색어 목록 끝 -->
+          <!-- 검색 결과 시작 -->
+          <div class="search__result">
+            <div class="search__filters">
+            </div>
+            <div>
+              <table class="table table--auto-width header__search-result-table">
+                <thead class="table__headr header__search-result-table-head">
+                  <tr class="table__row header__search-result-table-row">
+                    <th class="table__head-cell">NO</th>
+                    <th class="table__head-cell">구분</th>
+                    <th class="table__head-cell">리포트명</th>
+                    <th class="table__head-cell">작성일</th>
+                  </tr>
+                </thead>
+                <tbody class="table__body header__search-result-table-body">
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination header__search-result-pagination">
+              <!-- 이전 페이지 -->
+              <button class="pagination__prev header__search-result-pagination-prev">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.9087 12L16 17.0913L14.5456 18.5456L8 12L14.5456 5.45435L16 6.9087L10.9087 12Z" fill="#BABABA" />
+                </svg>
+              </button>
+              <div class="pagination__list header__search-result-pagination-list">
+              </div>
+              <button class="pagination__next header__search-result-pagination-next">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.0913 12L8 17.0913L9.45436 18.5456L16 12L9.45436 5.45435L8 6.9087L13.0913 12Z" fill="#BABABA" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 검색 결과 끝 -->
+        </div>
+      </div>
+    </div>
+    <!-- 검색모달 끝-->
