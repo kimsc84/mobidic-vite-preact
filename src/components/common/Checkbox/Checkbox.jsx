@@ -1,33 +1,61 @@
-// src/components/common/Checkbox/Checkbox.jsx
 import { h } from 'preact';
 
 /**
  * @param {object} props
- * @param {string} props.id - checkbox ID (label과 연결)
- * @param {string} props.label - 사용자에게 보여질 라벨 텍스트
- * @param {boolean} [props.checked] - 체크 여부
- * @param {function} [props.onChange] - change 이벤트 핸들러
- * @param {boolean} [props.disabled] - 비활성화 여부
- * @param {string} [props.className] - 추가적인 CSS 클래스 (label에 적용)
- * @returns {import("preact").JSX.Element} Checkbox 컴포넌트
+ * @param {string} [props.id] - The ID of the checkbox.
+ * @param {string} [props.name] - The name of the checkbox.
+ * @param {boolean} [props.checked] - Whether the checkbox is checked.
+ * @param {function} [props.onChange] - Callback function when the checkbox state changes.
+ * @param {string} [props.label] - The label text for the checkbox.
+ * @param {boolean} [props.disabled] - If the checkbox is disabled.
+ * @param {boolean} [props.required] - If the checkbox is required (for styling/validation hint).
+ * @param {string} [props.className] - Additional class names for the wrapper label.
+ * @param {string} [props.inputClassName] - Additional class names for the input element itself.
+ * @param {string} [props.labelClassName] - Additional class names for the label text span.
+ * @param {string} [props.ariaDescribedby] -  ID of an element describing the input.
  */
-export function Checkbox({ id, label, checked, onChange, disabled, className = '', ...restProps }) {
+const Checkbox = (props) => {
+  const {
+    id,
+    name,
+    checked,
+    onChange,
+    label,
+    disabled,
+    required,
+    className = '',
+    inputClassName = '',
+    labelClassName = '',
+    ariaDescribedby,
+  } = props;
+
+  // Combine classes for the main label wrapper
+  const labelWrapperClasses = ['checkbox'];
+  if (disabled) {
+    labelWrapperClasses.push('checkbox--disabled');
+  }
+  if (className) {
+    labelWrapperClasses.push(className);
+  }
+
   return (
-    <label class={`checkbox ${className} ${disabled ? 'checkbox--disabled' : ''}`} htmlFor={id}>
+    <label class={labelWrapperClasses.join(' ')} for={id}>
       <input
         type="checkbox"
         id={id}
+        name={name}
         checked={checked}
-        onChange={onChange}
         disabled={disabled}
-        class="checkbox__input" // global.css의 .checkbox__input 사용
-        {...restProps}
+        required={required}
+        onChange={onChange}
+        class={`checkbox__input ${inputClassName}`.trim()}
+        aria-describedby={ariaDescribedby}
       />
-      <span class="checkbox__label-text">{label}</span>
+      {label && <span class={`checkbox__label-text ${labelClassName}`.trim()}>{label}</span>}
+      {/* Required mark can be handled by FormFieldWrapper or CSS if needed, or added here */}
+      {/* For now, 'required' prop is mainly for the input's own attribute */}
     </label>
   );
-}
+};
 
-// 사용 예시:
-// <Checkbox id="agree-terms" label="약관에 동의합니다" checked={isAgreed} onChange={handleAgreementChange} />
-// <Checkbox id="subscribe-news" label="뉴스레터 구독" disabled />
+export default Checkbox;

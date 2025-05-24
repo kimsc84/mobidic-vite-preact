@@ -355,7 +355,33 @@ export function initializePage() {
         }
       },
       { id: 'dev-action-close-all-drawers', text: '모든 드로워 닫기 (테스트)', action: () => { if(window.sidebarAPI && window.sidebarAPI.closeAllDrawers) { window.sidebarAPI.closeAllDrawers('devActionCloseAll'); alert('모든 드로워 닫기 시도.'); } else { alert('sidebarAPI.closeAllDrawers 없음');} } },
-      { id: 'dev-action-test-dialog', text: '테스트 다이얼로그 열기', action: () => { if(window.dialogManager) { window.dialogManager.openDialog('confirm', { title: '개발자 테스트', message: '이것은 개발자 페이지에서 실행된 테스트 다이얼로그입니다.', confirmText: '확인했음', cancelText: '안할래', onConfirm: () => console.log('[DevDialog] 확인됨'), onCancel: () => console.log('[DevDialog] 취소됨') }); } else { alert('DialogManager 없음');} } },
+      { 
+        id: 'dev-action-test-dialog', 
+        text: '테스트 다이얼로그 열기', 
+        action: () => { 
+          if (window.globalShowDialog) { // Changed from window.dialogManager
+            window.globalShowDialog('confirm', { 
+              title: '개발자 테스트', 
+              message: '이것은 개발자 페이지에서 실행된 테스트 다이얼로그입니다.',
+              // Assuming the 'confirm' dialog template in dialogTemplates.js defines
+              // footer buttons with actions 'confirm' and 'cancel'.
+              // These texts might be part of the template itself or passed to override.
+              // For this example, we rely on the template for button text and pass callbacks.
+              callbacks: {
+                confirm: () => console.log('[DevDialog] 확인됨'), // Corresponds to a button with action: 'confirm'
+                cancel: () => console.log('[DevDialog] 취소됨')   // Corresponds to a button with action: 'cancel'
+              }
+              // If the 'confirm' template in dialogTemplates.js needs text overrides:
+              // footerActions: [
+              //   { text: '확인했음', action: 'confirm', class: 'button--primary' },
+              //   { text: '안할래', action: 'cancel' }
+              // ]
+            }); 
+          } else { 
+            alert('globalShowDialog function not found.'); // Updated message
+          } 
+        } 
+      },
       // { id: 'dev-action-test-toast', text: '테스트 토스트 메시지', action: () => { /* 여기에 토스트 메시지 호출 로직 */ alert('토스트 기능 구현 필요'); } },
     ];
 

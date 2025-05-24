@@ -483,36 +483,35 @@ export function initializePage() {
   const runReportButtonContainer = document.getElementById('run-report-button-container');
   const runReportButton = document.getElementById('run-report-button');
 
-  if (reportId && promptTemplate[reportId] && promptContainerElement && window.dialogManager && runReportButtonContainer && runReportButton) {
+  if (reportId && promptTemplate[reportId] && promptContainerElement && runReportButtonContainer && runReportButton) { // window.dialogManager check removed
     console.log(`[ReportIframe] 리포트 ID(${reportId})에 대한 프롬프트 템플릿 발견.`);
-    promptContainerElement.style.display = 'block'; // 프롬프트 컨테이너 보이기
-    runReportButtonContainer.style.display = 'block'; // 실행 버튼 컨테이너 보이기
+    promptContainerElement.style.display = 'block'; 
+    runReportButtonContainer.style.display = 'block'; 
 
     const originalPromptFields = promptTemplate[reportId];
     const transformedPromptFields = transformPromptFields(originalPromptFields);
 
     const templateForPrompt = {
       fields: transformedPromptFields,
-      dialogLayout: "mixed-flex" // dialogManager가 form에 display:flex, flex-wrap:wrap 스타일 적용
+      dialogLayout: "mixed-flex"
     };
-
-    // 초기 프롬프트 데이터 (필요시 URL 파라미터 등에서 가져와 설정)
     const initialPromptData = {};
-    // 예: urlParams.forEach((value, key) => { if (key.startsWith('prompt_')) initialPromptData[key.substring(7)] = value; });
 
-    const promptFormControls = window.dialogManager.renderFormInContainer(
-      promptContainerElement, // 폼을 그릴 실제 div 요소
-      templateForPrompt,
-      initialPromptData
-    );
+    // TODO: Replace with Preact rendering of a FormRenderer component.
+    // const promptFormControls = window.dialogManager.renderFormInContainer(
+    //   promptContainerElement, 
+    //   templateForPrompt,
+    //   initialPromptData
+    // );
+    const promptFormControls = null; // Placeholder
+    console.warn('[ReportIframe] renderFormInContainer is disabled pending Preact refactor for prompts.');
 
-    if (promptFormControls) {
+
+    if (promptFormControls) { // This block will likely not execute now
       runReportButton.addEventListener('click', () => {
         if (promptFormControls.validate()) {
           const promptData = promptFormControls.getFormData();
           console.log('[ReportIframe] 리포트 실행 버튼 클릭. 프롬프트 데이터:', promptData);
-          // TODO: 수집된 promptData를 사용하여 iframe의 src를 업데이트하거나 API 호출
-          // 예: iframeElement.src = `/actual-report-url?${new URLSearchParams(promptData).toString()}`;
           alert('프롬프트 데이터가 수집되었습니다. 콘솔을 확인하세요.\n' + JSON.stringify(promptData, null, 2));
         } else {
           console.log('[ReportIframe] 프롬프트 유효성 검사 실패.');
@@ -520,18 +519,22 @@ export function initializePage() {
         }
       });
     } else {
-      console.error('[ReportIframe] 프롬프트 폼 생성 실패.');
-      promptContainerElement.style.display = 'none';
-      runReportButtonContainer.style.display = 'none';
+      // Keep this else or adjust, as promptFormControls is now null
+      console.error('[ReportIframe] 프롬프트 폼 생성 로직 주석 처리됨 (promptFormControls is null).');
+      // Optionally, still add a simplified event listener to runReportButton for feedback
+      runReportButton.addEventListener('click', () => {
+        alert('Prompt functionality is pending Preact refactor. Form data cannot be collected yet.');
+        console.log('[ReportIframe] 리포트 실행 버튼 클릭 ( 기능 비활성 상태 ).');
+      });
     }
   } else {
     if (!reportId) console.log('[ReportIframe] URL에서 리포트 ID를 찾을 수 없습니다.');
     else if (!promptTemplate[reportId]) console.log(`[ReportIframe] 리포트 ID(${reportId})에 대한 프롬프트 템플릿이 없습니다.`);
     else if (!promptContainerElement) console.error('[ReportIframe] 프롬프트 컨테이너(#prompt-container)를 찾을 수 없습니다.');
-    else if (!window.dialogManager) console.error('[ReportIframe] DialogManager를 찾을 수 없습니다.');
+    // else if (!window.dialogManager) console.error('[ReportIframe] DialogManager를 찾을 수 없습니다.'); // This check is less relevant now
     
-    if (promptContainerElement) promptContainerElement.style.display = 'none'; // 프롬프트 컨테이너 숨기기
-    if (runReportButtonContainer) runReportButtonContainer.style.display = 'none'; // 실행 버튼 컨테이너 숨기기
+    if (promptContainerElement) promptContainerElement.style.display = 'none'; 
+    if (runReportButtonContainer) runReportButtonContainer.style.display = 'none'; 
   }
   // --- 프롬프트 영역 생성 로직 끝 ---
 

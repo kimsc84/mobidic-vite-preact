@@ -64,10 +64,10 @@ export const menuConfig = [
     title: '공통 필드 테스트', // text -> title 변경
     onClick: () => {
       // 이 메뉴는 2뎁스 드로어를 열지 않고 바로 다이얼로그를 띄우므로 drawerItemsKey 불필요
-      if (window.dialogManager) {
-        window.dialogManager.open('commonField');
+      if (window.globalShowDialog) { // Changed from window.dialogManager
+        window.globalShowDialog('commonField', {}); // Changed to new function call
       } else {
-        console.error('[메뉴 클릭 오류] DialogManager 인스턴스를 찾을 수 없습니다.');
+        console.error('[메뉴 클릭 오류] globalShowDialog function not found.'); // Updated error message
       }
     }
   }

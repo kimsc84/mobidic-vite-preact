@@ -1,7 +1,7 @@
 // code-group.js
 
 // import DialogManager from "../../../js/dialogManager.js"; // KIBO-UI DialogManager 임포트
-import DialogManager from "@/components/dialog/dialogManager.js"; // KIBO-UI DialogManager
+// import DialogManager from "@/components/dialog/dialogManager.js"; // KIBO-UI DialogManager // Commented out for new DialogManagerComponent
 
 // 전역 상태 관리
 const state = {
@@ -143,7 +143,7 @@ const panelTemplates = {
 // DialogManager는 main.js에서 전역으로 window.dialogManager에 할당될 수 있으므로,
 // 여기서는 해당 인스턴스를 사용하거나, 없다면 새로 생성하도록 로직을 추가하는 것이 안전합니다.
 // 현재 코드는 페이지 로드 시점에 DialogManager가 이미 전역에 있다고 가정합니다.
-// const dialogManager = new DialogManager(); // main.js에서 전역으로 관리하는 경우 주석 처리
+// const dialogManager = new DialogManager(); // Commented out: main.js에서 전역으로 관리하는 경우 주석 처리
 
 /**
  * 지정된 셀렉터에 해당하는 모든 DOM 요소가 나타날 때까지 기다립니다.
@@ -316,39 +316,34 @@ function renderSubCodeList(codes) {
  * @param {string} codeId - 상세 정보를 볼 하위 코드의 ID.
  */
 function viewSubCodeDetail(codeId) {
-    // DialogManager 인스턴스가 전역에 있는지 확인
-    const dialogManager = window.dialogManager;
-    if (!dialogManager) {
-        console.error("[상세] 하위 코드: DialogManager 인스턴스를 찾을 수 없습니다.");
-        alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요.");
+    if (!window.globalShowDialog) {
+        console.error("[상세] 하위 코드: globalShowDialog function not found.");
+        alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요."); // This alert can also be replaced
         return;
     }
 
     if (!state.selectedCodeGroup || !state.selectedCodeGroup.codes) {
-        // 사용자에게 알림 (좀 더 부드럽게)
         console.warn("[상세] 하위 코드: 상위 코드 그룹 또는 하위 코드가 선택되지 않았습니다.");
-        dialogManager.open('alert', { title: '알림', message: '상위 코드 그룹 또는 하위 코드가 선택되지 않았습니다.' });
+        window.globalShowDialog('alert', { title: '알림', message: '상위 코드 그룹 또는 하위 코드가 선택되지 않았습니다.' });
         return;
     }
     const subCode = state.selectedCodeGroup.codes.find(c => c.id === codeId);
     if (subCode) {
-        // dialogTemplates.js의 codeDetail 템플릿 사용
         const dialogData = {
             group_id: state.selectedCodeGroup.id,
             group_name: state.selectedCodeGroup.name,
             id: subCode.id,
             name: subCode.name,
-            description: subCode.description || '', // 설명이 없을 수도 있으니 기본값 처리
+            description: subCode.description || '',
             usage: subCode.usage,
-            parent: subCode.parent || '', // 하위 코드의 parent 정보가 있다면 사용, 없으면 빈 문자열
-            dialogWidth: "700px", 
+            parent: subCode.parent || '',
+            dialogWidth: "700px",
         };
-        
-        //dialogData.dialogWidth = '500px'; // 모달 너비 설정
-
-        dialogManager.open('codeDetail', dialogData);
+        // Pass handlePageDialogSubmit as the third argument if this dialog has submit actions
+        // For 'codeDetail', if it can lead to 'codeUpdate', then the submit handler is relevant.
+        window.globalShowDialog('codeDetail', dialogData, handlePageDialogSubmit); 
     } else {
-        alert("해당 ID의 하위 코드를 찾을 수 없습니다.");
+        window.globalShowDialog('alert', { title: '오류', message: '해당 ID의 하위 코드를 찾을 수 없습니다.' });
     }
 }
 
@@ -400,22 +395,20 @@ function updateSubCodeList() {
  * 현재 선택된 코드 그룹에 새로운 하위 코드를 추가하기 위한 모달을 엽니다.
  */
 function addSubCode() {
-     // DialogManager 인스턴스가 전역에 있는지 확인
-     const dialogManager = window.dialogManager;
-     if (!dialogManager) {
-         console.error("[추가] 하위 코드: DialogManager 인스턴스를 찾을 수 없습니다.");
-         alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요.");
-         return;
-     }
-
-    if (!state.selectedCodeGroup) {
-        alert("코드를 추가할 상위 코드 그룹을 먼저 선택해주세요.");
+    if (!window.globalShowDialog) {
+        console.error("[추가] 하위 코드: globalShowDialog function not found.");
+        alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요."); // This alert can also be replaced
         return;
     }
-    dialogManager.open('codeCreate', {
+
+    if (!state.selectedCodeGroup) {
+        window.globalShowDialog('alert', { title: '알림', message: '코드를 추가할 상위 코드 그룹을 먼저 선택해주세요.' });
+        return;
+    }
+    window.globalShowDialog('codeCreate', {
         group_id: state.selectedCodeGroup.id,
         group_name: state.selectedCodeGroup.name
-    });
+    }, handlePageDialogSubmit); // Pass submit handler
 }
 
 /**
@@ -501,72 +494,66 @@ function getActiveSearchConditions() {
     return conditions;
 }
 
-// Dialog 콜백 업데이트
-// DialogManager 인스턴스가 전역에 있다고 가정
-if (window.dialogManager) {
-    window.dialogManager.setSubmitCallback((dialogType, formData) => {
-        console.info(`[Dialog 제출] 유형: ${dialogType}, 데이터:`, formData);
-        
-        if (dialogType === 'codeGroupCreate') {
-            const newGroup = {
-                ...formData,
-                // TODO: 실제 API 호출로 ID, 등록자, 등록일 등 받아오기
-                id: `GRP-${Date.now().toString().slice(-6)}`, // 임시 ID 생성
-                registrant: '현재사용자', // 임시 등록자
-                registrationDate: new Date().toISOString().split('T')[0], // 임시 등록일
-                codes: [] // 새 그룹은 하위 코드가 비어있음
-            };
-            state.codeGroups.push(newGroup);
-            applyFiltersAndSearch(); // 필터/검색 상태 유지하며 목록 업데이트
-            selectCodeGroup(newGroup.id); // 새로 추가된 그룹 선택
-            alert('새 코드 그룹이 등록되었습니다!');
-        } 
-        else if (dialogType === 'codeGroupUpdate' && state.selectedCodeGroup) {
-            // TODO: 실제 API 호출로 수정 반영
-            // Object.assign(state.selectedCodeGroup, formData); // API 응답으로 상태 업데이트 필요
-            
-            // 임시: 현재 상태 직접 업데이트
-            const updatedGroupIndex = state.codeGroups.findIndex(g => g.id === state.selectedCodeGroup.id);
-            if (updatedGroupIndex !== -1) {
-                 state.codeGroups[updatedGroupIndex] = {
-                     ...state.codeGroups[updatedGroupIndex], // 기존 속성 유지
-                     ...formData // 폼 데이터로 덮어쓰기
-                 };
-                 state.selectedCodeGroup = state.codeGroups[updatedGroupIndex]; // 선택된 그룹 참조 업데이트
-            }
-
-            applyFiltersAndSearch(); // 필터/검색 상태 유지하며 목록 업데이트
-            renderCodeGroupDetail(); // 상세 정보 다시 렌더링
-            alert('코드 그룹 정보가 수정되었습니다!'); 
+// This function should be passed as the onSubmit prop to DialogManagerComponent
+// when dialogs for this page are shown.
+function handlePageDialogSubmit(dialogType, formData) {
+    console.info(`[Dialog 제출] 유형: ${dialogType}, 데이터:`, formData);
+    
+    if (dialogType === 'codeGroupCreate') {
+        const newGroup = {
+            ...formData,
+            // TODO: 실제 API 호출로 ID, 등록자, 등록일 등 받아오기
+            id: `GRP-${Date.now().toString().slice(-6)}`, 
+            registrant: '현재사용자', 
+            registrationDate: new Date().toISOString().split('T')[0], 
+            codes: [] 
+        };
+        state.codeGroups.push(newGroup);
+        applyFiltersAndSearch(); 
+        selectCodeGroup(newGroup.id); 
+        if (window.globalShowDialog) window.globalShowDialog('alert', { title: '성공', message: '새 코드 그룹이 등록되었습니다!' });
+        else alert('새 코드 그룹이 등록되었습니다!'); // Fallback for safety, though globalShowDialog should exist
+    } 
+    else if (dialogType === 'codeGroupUpdate' && state.selectedCodeGroup) {
+        // TODO: 실제 API 호출로 수정 반영
+        const updatedGroupIndex = state.codeGroups.findIndex(g => g.id === state.selectedCodeGroup.id);
+        if (updatedGroupIndex !== -1) {
+             state.codeGroups[updatedGroupIndex] = {
+                 ...state.codeGroups[updatedGroupIndex], 
+                 ...formData 
+             };
+             state.selectedCodeGroup = state.codeGroups[updatedGroupIndex]; 
         }
-        else if (dialogType === 'codeCreate' && state.selectedCodeGroup) {
-             // TODO: 실제 API 호출로 코드 추가 및 ID 받아오기
-            const newCode = {
-                ...formData,
-                id: `CODE-${Date.now().toString().slice(-6)}` // 임시 ID 생성
-            };
-            state.selectedCodeGroup.codes.push(newCode);
-            renderSubCodeList(state.selectedCodeGroup.codes); // 하위 코드 목록 다시 렌더링
-            alert('새 코드가 추가되었습니다!');
+        applyFiltersAndSearch(); 
+        renderCodeGroupDetail(); 
+        if (window.globalShowDialog) window.globalShowDialog('alert', { title: '성공', message: '코드 그룹 정보가 수정되었습니다!' });
+        else alert('코드 그룹 정보가 수정되었습니다!');
+    }
+    else if (dialogType === 'codeCreate' && state.selectedCodeGroup) {
+        const newCode = {
+            ...formData,
+            id: `CODE-${Date.now().toString().slice(-6)}` 
+        };
+        state.selectedCodeGroup.codes.push(newCode);
+        renderSubCodeList(state.selectedCodeGroup.codes); 
+        if (window.globalShowDialog) window.globalShowDialog('alert', { title: '성공', message: '새 코드가 추가되었습니다!' });
+        else alert('새 코드가 추가되었습니다!');
+    }
+    else if (dialogType === 'codeUpdate' && state.selectedCodeGroup) {
+        const codeIndex = state.selectedCodeGroup.codes.findIndex(c => c.id === formData.id);
+        if (codeIndex >= 0) {
+            state.selectedCodeGroup.codes[codeIndex] = {...state.selectedCodeGroup.codes[codeIndex], ...formData};
+            renderSubCodeList(state.selectedCodeGroup.codes);
+            if (window.globalShowDialog) window.globalShowDialog('alert', { title: '성공', message: '코드 정보가 수정되었습니다!' });
+            else alert('코드 정보가 수정되었습니다!');
+        } else {
+            console.warn(`[Dialog 제출 오류] 코드 수정: 코드 그룹(${state.selectedCodeGroup.id})에서 코드 ID(${formData.id})를 찾을 수 없습니다.`);
+            if (window.globalShowDialog) window.globalShowDialog('alert', { title: '오류', message: '코드 수정에 실패했습니다. 해당 코드를 찾을 수 없습니다.' });
+            else alert('코드 수정에 실패했습니다. 해당 코드를 찾을 수 없습니다.');
         }
-        else if (dialogType === 'codeUpdate' && state.selectedCodeGroup) {
-            // TODO: 실제 API 호출로 코드 수정 반영
-            const codeIndex = state.selectedCodeGroup.codes.findIndex(c => c.id === formData.id);
-            if (codeIndex >= 0) {
-                state.selectedCodeGroup.codes[codeIndex] = {...state.selectedCodeGroup.codes[codeIndex], ...formData}; // 기존 속성 유지하며 덮어쓰기
-                renderSubCodeList(state.selectedCodeGroup.codes); // 하위 코드 목록 다시 렌더링
-                alert('코드 정보가 수정되었습니다!');
-            } else {
-                console.warn(`[Dialog 제출 오류] 코드 수정: 코드 그룹(${state.selectedCodeGroup.id})에서 코드 ID(${formData.id})를 찾을 수 없습니다.`);
-                alert('코드 수정에 실패했습니다. 해당 코드를 찾을 수 없습니다.');
-            }
-        }
-        // TODO: 다른 dialogType (예: codeDetail 보기 모달의 수정 버튼) 처리 추가
-    });
-} else {
-    console.error("[code-group.js] DialogManager 인스턴스(window.dialogManager)를 찾을 수 없습니다. 모달 기능이 작동하지 않습니다.");
+    }
+    // TODO: 다른 dialogType (예: codeDetail 보기 모달의 수정 버튼) 처리 추가
 }
-
 
 /**
  * 페이지 내 주요 DOM 요소들에 대한 이벤트 리스너를 초기화하고 바인딩합니다.
@@ -646,36 +633,28 @@ function initializeEventListeners() {
     // 코드그룹 추가 버튼
     if (dom.addCodeGroupButton) {
         dom.addCodeGroupButton.addEventListener('click', () => {
-             // DialogManager 인스턴스가 전역에 있는지 확인
-             const dialogManager = window.dialogManager;
-             if (!dialogManager) {
-                 console.error("[Dialog 오류] 코드 그룹 추가: DialogManager 없음.");
-                 alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요.");
-                 return;
-             }
-            dialogManager.open('codeGroupCreate');
+            if (!window.globalShowDialog) {
+                console.error("[Dialog 오류] 코드 그룹 추가: globalShowDialog function not found.");
+                alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요."); // This alert can also be replaced
+                return;
+            }
+            window.globalShowDialog('codeGroupCreate', {}, handlePageDialogSubmit); 
         });
     }
 
     // 코드그룹 상세 편집 버튼
     if (dom.codeDetailEditButton) {
         dom.codeDetailEditButton.addEventListener('click', () => {
-             // DialogManager 인스턴스가 전역에 있는지 확인
-             const dialogManager = window.dialogManager;
-             if (!dialogManager) {
-                 console.error("[Dialog 오류] 코드 그룹 편집: DialogManager 없음.");
-                 alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요.");
-                 return;
-             }
-
-            if (!state.selectedCodeGroup) {
-                alert('편집할 코드 그룹을 선택해주세요.');
+            if (!window.globalShowDialog) {
+                console.error("[Dialog 오류] 코드 그룹 편집: globalShowDialog function not found.");
+                alert("모달 기능을 사용할 수 없습니다. 페이지 초기화 오류를 확인해주세요."); // This alert can also be replaced
                 return;
             }
-            // codeGroupUpdate 템플릿에 현재 선택된 그룹 데이터 전달
-            dialogManager.open('codeGroupUpdate', state.selectedCodeGroup);
-            // TODO: 편집 모달이 열리면 상세 정보 필드들의 disabled 속성을 해제해야 함.
-            // 모달 닫힐 때 다시 disabled 처리 필요.
+            if (!state.selectedCodeGroup) {
+                window.globalShowDialog('alert', { title: '알림', message: '편집할 코드 그룹을 선택해주세요.' });
+                return;
+            }
+            window.globalShowDialog('codeGroupUpdate', state.selectedCodeGroup, handlePageDialogSubmit);
         });
     }
 
@@ -711,42 +690,41 @@ function initializeEventListeners() {
  * 각 패널의 내용은 <form> 태그로 감싸져 #*-content-wrapper 내부에 생성됩니다.
  */
 async function renderPanelsUsingDialogManager() {
-    console.info('[패널 렌더링] DialogManager.renderFormInContainer 사용하여 시작');
-    const dialogManager = window.dialogManager;
-    if (!dialogManager || typeof dialogManager.renderFormInContainer !== 'function') {
-        console.error("[패널 렌더링 오류] DialogManager 또는 renderFormInContainer 사용 불가.");
-        throw new Error("DialogManager 또는 renderFormInContainer를 사용할 수 없습니다.");
-    }
-
-    const listPanelContentWrapper = document.getElementById('list-panel-content-wrapper');
-    const detailPanelContentWrapper = document.getElementById('detail-panel-content-wrapper');
-
-    if (!listPanelContentWrapper || !detailPanelContentWrapper) {
-        console.error("[패널 렌더링 오류] 패널 컨텐츠 래퍼 요소를 찾을 수 없습니다.");
-        throw new Error("패널 컨텐츠 래퍼 요소를 찾을 수 없습니다 (#list-panel-content-wrapper 또는 #detail-panel-content-wrapper).");
-    }
-
-    try {
-        // renderFormInContainer는 컨테이너 내부에 <form>을 생성하고 그 안에 template의 fields를 렌더링합니다.
-        // 반환값은 폼 제어 객체이지만, 여기서는 당장 사용하지 않습니다.
-        dialogManager.renderLayoutBlocks(listPanelContentWrapper, panelTemplates.listPanel.fields);
-        console.info('[패널 렌더링] 리스트 패널 컨텐츠 생성 완료 (renderLayoutBlocks 사용).');
-
-        dialogManager.renderLayoutBlocks(detailPanelContentWrapper, panelTemplates.detailPanel.fields);
-        console.info('[패널 렌더링] 상세 패널 컨텐츠 생성 완료 (renderLayoutBlocks 사용).');
-
-        // 상세 패널은 초기에 숨김 처리 (detail-panel 클래스가 있는 <aside> 태그를 숨김)
-        const detailPanelAside = document.querySelector('.detail-panel');
-        if (detailPanelAside) {
-            detailPanelAside.style.display = 'none';
-        } else {
-            console.warn('[패널 렌더링] 상세 패널 <aside class="detail-panel"> 요소를 찾지 못해 숨김 처리 불가.');
-        }
-        console.info('[패널 렌더링] DialogManager.renderLayoutBlocks 사용하여 완료.');
-    } catch (error) {
-        console.error('[패널 렌더링 오류] renderFormInContainer 실행 중:', error);
-        throw error; // 초기화 실패로 이어지도록 오류 다시 던지기
-    }
+    // console.info('[패널 렌더링] DialogManager.renderFormInContainer 사용하여 시작');
+    // TODO: Refactor panel rendering to use Preact components instead of dialogManager.renderLayoutBlocks.
+    // const dialogManager = window.dialogManager;
+    // if (!dialogManager || typeof dialogManager.renderFormInContainer !== 'function') {
+    //     console.error("[패널 렌더링 오류] DialogManager 또는 renderFormInContainer 사용 불가.");
+    //     throw new Error("DialogManager 또는 renderFormInContainer를 사용할 수 없습니다.");
+    // }
+    //
+    // const listPanelContentWrapper = document.getElementById('list-panel-content-wrapper');
+    // const detailPanelContentWrapper = document.getElementById('detail-panel-content-wrapper');
+    //
+    // if (!listPanelContentWrapper || !detailPanelContentWrapper) {
+    //     console.error("[패널 렌더링 오류] 패널 컨텐츠 래퍼 요소를 찾을 수 없습니다.");
+    //     throw new Error("패널 컨텐츠 래퍼 요소를 찾을 수 없습니다 (#list-panel-content-wrapper 또는 #detail-panel-content-wrapper).");
+    // }
+    //
+    // try {
+    //     dialogManager.renderLayoutBlocks(listPanelContentWrapper, panelTemplates.listPanel.fields);
+    //     console.info('[패널 렌더링] 리스트 패널 컨텐츠 생성 완료 (renderLayoutBlocks 사용).');
+    //
+    //     dialogManager.renderLayoutBlocks(detailPanelContentWrapper, panelTemplates.detailPanel.fields);
+    //     console.info('[패널 렌더링] 상세 패널 컨텐츠 생성 완료 (renderLayoutBlocks 사용).');
+    //
+    //     const detailPanelAside = document.querySelector('.detail-panel');
+    //     if (detailPanelAside) {
+    //         detailPanelAside.style.display = 'none';
+    //     } else {
+    //         console.warn('[패널 렌더링] 상세 패널 <aside class="detail-panel"> 요소를 찾지 못해 숨김 처리 불가.');
+    //     }
+    //     console.info('[패널 렌더링] DialogManager.renderLayoutBlocks 사용하여 완료.');
+    // } catch (error) {
+    //     console.error('[패널 렌더링 오류] renderFormInContainer 실행 중:', error);
+    //     throw error;
+    // }
+    console.warn("[renderPanelsUsingDialogManager] Panel rendering is currently disabled pending Preact refactor.");
 }
 
 /**
@@ -770,11 +748,14 @@ export async function initializePage() {
         await waitForElements(initialCriticalSelectors, 10000); // 대기 시간 10초
         console.debug(`[DOM 대기] 완료: 모든 필수 DOM 요소 확인됨 (${window.location.pathname}).`);
 
-        // DialogManager를 사용하여 패널 컨텐츠 렌더링
-        await renderPanelsUsingDialogManager();
+        // DialogManager를 사용하여 패널 컨텐츠 렌더링 - 현재 비활성화됨
+        // await renderPanelsUsingDialogManager(); // This function will now just log a warning and not create panel content
 
         // 패널 컨텐츠가 렌더링된 후, 그 내부의 핵심 요소들을 기다립니다.
         // DialogManager가 <form>을 생성하므로, form 내부의 요소를 기다려야 합니다.
+        // Since renderPanelsUsingDialogManager is disabled, these might not be found unless HTML is static.
+        // For this refactoring step, we accept that panel internal elements might not be fully available
+        // as panel rendering itself is deferred.
         const panelInternalCriticalSelectors = [
             '#list-panel-content-wrapper .list-panel__table-body', // 'form' 제거
             '#list-panel-content-wrapper .list-panel__add-button', // 'form' 제거
